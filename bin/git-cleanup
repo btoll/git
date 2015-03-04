@@ -9,6 +9,7 @@ DRY_RUN=false
 FOUND=false
 HEAD=$(git rev-parse --abbrev-ref HEAD)
 IMODE=false
+IMODE_MSG="merged or empty"
 NO_REMOTE_DELETE=false
 PATTERN=${GIT_CLEANUP_PATTERN:-"."}
 REPO=${GIT_DEFAULT_REPO:-"origin"}
@@ -53,7 +54,7 @@ while [ "$#" -gt 0 ]; do
         --help|-help|-h) usage; exit 0 ;;
         -i) IMODE=true ;;
         --dry-run|-l) DRY_RUN=true ;;
-        --no-merged) BRANCH_SWITCH="--no-merged"; DELETE_SWITCH="-D" ;;
+        --no-merged) BRANCH_SWITCH="--no-merged"; DELETE_SWITCH="-D"; IMODE_MSG="unmerged" ;;
         --no-remote-delete) NO_REMOTE_DELETE=true ;;
         --pattern|-pattern|-p) shift; PATTERN=$1 ;;
         --repo|-repo|-r) shift; REPO=$1 ;;
@@ -89,15 +90,21 @@ for BRANCH in $BRANCHES; do
             fi
         else
             if "$IMODE"; then
-                echo -e "\n\"$BRANCH\" contains the following UNMERGED commits:"
+                echo -e "\n\"$BRANCH\" contains the following $IMODE_MSG commits:"
                 echo -e "\n-----------------------------------------------"
+
                 # http://stackoverflow.com/a/4207176
                 git log "$BRANCH" ^"$HEAD" --no-merges
+
                 echo -e "-----------------------------------------------\n"
-                read -p "Delete branch \"$BRANCH\" anyway? [y/N] " CONTINUE
+                read -p "Delete branch \"$BRANCH\"? [y/N/q] " CONTINUE
+
                 if [ "$CONTINUE" = "y" ]; then
                     delete_branch
                     echo -e "================================================\n"
+                elif [ "$CONTINUE" = "q" ]; then
+                    echo "Exiting."
+                    exit 0
                 fi
             else
                 delete_branch
