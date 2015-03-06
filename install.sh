@@ -46,10 +46,21 @@ git config --global alias.unstage = "reset HEAD --"
 
 echo "[Install] Creating symbolic links for git extensions..."
 echo
-ln -s "$PWD"/git/bin/git-cleanup /usr/local/bin/git-cleanup
-ln -s "$PWD"/git/bin/git-hub /usr/local/bin/git-hub
-ln -s "$PWD"/git/bin/git-introduced /usr/local/bin/git-introduced
-ln -s "$PWD"/git/bin/git-ls /usr/local/bin/git-ls
+cd git/bin
+ln -s "$PWD"/git-cleanup /usr/local/bin/git-cleanup
+ln -s "$PWD"/git-hub /usr/local/bin/git-hub
+ln -s "$PWD"/git-introduced /usr/local/bin/git-introduced
+ln -s "$PWD"/git-ls /usr/local/bin/git-ls
+cd -
+
+echo "[Install] Installing git man pages..."
+echo
+cd git/man
+ln -s "$PWD"/git-cleanup.1 /usr/local/share/man/man1/git-cleanup.1
+ln -s "$PWD"/git-hub.1 /usr/local/share/man/man1/git-hub.1
+ln -s "$PWD"/git-introduced.1 /usr/local/share/man/man1/git-introduced.1
+ln -s "$PWD"/git-ls.1 /usr/local/share/man/man1/git-ls.1
+cd -
 
 if [ -n "$GIT" ]; then
     popd > /dev/null
@@ -66,14 +77,16 @@ git clone git@github.com:btoll/utils.git
 
 echo "[Install] Creating symbolic links for utils..."
 echo
-ln -s "$PWD"/utils/bootstrap.sh /usr/local/bin/bootstrap
-ln -s "$PWD"/utils/check-dependencies.sh /usr/local/bin/check-dependencies
-ln -s "$PWD"/utils/get-fiddle.sh /usr/local/bin/get-fiddle
-ln -s "$PWD"/utils/make_file.sh /usr/local/bin/make_file
-ln -s "$PWD"/utils/make_ticket.sh /usr/local/bin/make_ticket
+cd utils
+ln -s "$PWD"/bootstrap.sh /usr/local/bin/bootstrap
+ln -s "$PWD"/check-dependencies.sh /usr/local/bin/check-dependencies
+ln -s "$PWD"/get-fiddle.sh /usr/local/bin/get-fiddle
+ln -s "$PWD"/make_file.sh /usr/local/bin/make_file
+ln -s "$PWD"/make_ticket.sh /usr/local/bin/make_ticket
 
 # https://github.com/btoll/utils/tree/master/tmux
-ln -s "$PWD"/utils/tmux/tmuxly.sh /usr/local/bin/tmuxly
+ln -s "$PWD"/tmux/tmuxly.sh /usr/local/bin/tmuxly
+cd -
 
 if [ -n "$UTILS" ]; then
     popd > /dev/null
