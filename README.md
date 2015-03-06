@@ -6,7 +6,7 @@ git get-hash
 
 git goto
 
-    git config --global alias.goto '!sh -c '"'git show \$0 | grep commit | cut -c8- | xargs git co'"
+    git config --global alias.goto '!sh -c '"'git show \$0 | grep commit | cut -c8- | xargs git checkout'"
 
 git hub
 

@@ -30,15 +30,8 @@ git clone git@github.com:btoll/git.git
 
 echo
 echo "[Install] Creating global git aliases..."
-git config --global alias.br branch
-git config --global alias.ci commit
-git config --global alias.co checkout
 git config --global alias.get-hash '!sh -c '"'git show \$0 | grep commit | cut -c8-'"
-git config --global alias.goto '!sh -c '"'git show \$0 | grep commit | cut -c8- | xargs git co'"
-git config --global alias.last "log -1 HEAD"
-git config --global alias.st status
-git config --global alias.unmodify = "checkout --"
-git config --global alias.unstage = "reset HEAD --"
+git config --global alias.goto '!sh -c '"'git show \$0 | grep commit | cut -c8- | xargs git checkout'"
 
 echo "[Install] Creating symbolic links for git extensions..."
 echo
