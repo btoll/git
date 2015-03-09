@@ -180,10 +180,6 @@ It's best to show what this tool can do through examples.
 
     `git hub -remote extjs-4.2.x -f Component.js`
 
-- Don't open the file in a browser, dump it to STDOUT:
-
-    `git hub -f Component.js --dry-run`
-
 - Open the commit hash:
 
     `git hub -hash b51abf6f38902`
