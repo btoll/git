@@ -65,7 +65,7 @@ done
 # http://stackoverflow.com/a/3846451
 BRANCHES=$(git branch "$BRANCH_SWITCH" | cut -c 3-)
 
-echo "Match pattern: $PATTERN"
+echo -e "Match pattern: $PATTERN\n"
 
 if "$DRY_RUN"; then
     echo -e "[[DRY RUN MODE]] The following branches will be removed:\n"
@@ -73,7 +73,7 @@ fi
 
 for BRANCH in $BRANCHES; do
     # Let's operate on only the desired branches.
-    if [[ "$BRANCH" =~ ^$PATTERN ]]; then
+    if [[ "$BRANCH" =~ $PATTERN ]]; then
         FOUND=true
 
         if "$DRY_RUN"; then
