@@ -7,7 +7,7 @@ git config --global alias.goto '!sh -c '"'git show \$0 | grep commit | cut -c8- 
 
 echo "[Install] Creating symbolic links for git extensions..."
 echo
-pushd git/bin
+pushd bin
 ln -s "$PWD"/git-cleanup /usr/local/bin/git-cleanup
 ln -s "$PWD"/git-hub /usr/local/bin/git-hub
 ln -s "$PWD"/git-introduced /usr/local/bin/git-introduced
@@ -16,7 +16,7 @@ popd
 
 echo "[Install] Installing git man pages..."
 echo
-pushd git/man
+pushd man
 ln -s "$PWD"/git-cleanup.1 /usr/local/share/man/man1/git-cleanup.1
 ln -s "$PWD"/git-hub.1 /usr/local/share/man/man1/git-hub.1
 ln -s "$PWD"/git-introduced.1 /usr/local/share/man/man1/git-introduced.1
