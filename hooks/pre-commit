@@ -1,0 +1,9 @@
+#!/bin/bash
+
+FILES=$(git ls -p debugger)
+if [[ -n "$FILES" ]]; then
+    echo "Error: You have left a debugger statement in the following files:"
+    echo "$FILES"
+    exit 1
+fi
+

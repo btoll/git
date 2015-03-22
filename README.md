@@ -1,3 +1,9 @@
+### Installation
+
+1. Make sure that you have write permissions to `/usr/local/bin` and `/usr/local/share/man/man1`
+2. Run `./install.sh`
+3. Done
+
 ### git aliases
 
 git get-hash
@@ -16,18 +22,6 @@ git open-sha
 
     git config --global alias.open-sha '!sh -c '"'open https://github.com/extjs/SDK/commit/\$0'"
 
-### git extensions
-
-To install the git scripts:
-
-    1. Put the script anywhere in your PATH. For instance, `/usr/local/bin`.
-    2. Make sure it's executable.
-    3. Done.
-
-To install the git man pages:
-
-    1. Put the file anywhere in your manpath. For instance, `/usr/local/share/man/man1`.
-    2. Done.
 
 ### git-cleanup
 
