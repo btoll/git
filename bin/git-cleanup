@@ -65,10 +65,10 @@ done
 # http://stackoverflow.com/a/3846451
 BRANCHES=$(git branch "$BRANCH_SWITCH" | cut -c 3-)
 
-echo -e "Match pattern: $PATTERN\n"
+echo "$(tput setaf 2)[MATCH PATTERN]$(tput sgr0) $PATTERN"
 
 if "$DRY_RUN"; then
-    echo -e "[[DRY RUN MODE]] The following branches will be removed:\n"
+    echo " $(tput setaf 6)[DRY RUN MODE]$(tput sgr0) The following branches will be removed:"
 fi
 
 for BRANCH in $BRANCHES; do
@@ -77,7 +77,7 @@ for BRANCH in $BRANCHES; do
         FOUND=true
 
         if "$DRY_RUN"; then
-            echo $BRANCH
+            echo -e "\t$BRANCH"
         elif [ -n "$FILE" ]; then
             BUFFER[$COUNTER]="# $BRANCH"
             COUNTER=$((COUNTER + 1))
@@ -118,10 +118,11 @@ if [ -n "$FILE" ]; then
     printf "%s\n" "${BUFFER[@]}" > "$FILE"
     # ..and make it executable.
     chmod 701 "$FILE"
-    echo "Results written to $FILE."
+    echo "$(tput setaf 2)[INFO]$(tput sgr0) Results written to $FILE."
     exit 0
 fi
 
 if [ "$FOUND" = false ]; then
-    echo "git-cleanup: No matches found."
+    echo "  $(tput setaf 6)[GIT-CLEANUP]$(tput sgr0) No matches found."
 fi
+
