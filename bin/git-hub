@@ -7,7 +7,7 @@ COMMIT=
 FILE=
 HASH=
 QUERY=
-REMOTE_BRANCH=${GIT_HUB_REMOTE_BRANCH:-sencha-5.0.x}
+REMOTE_BRANCH=
 URL=
 
 usage() {
@@ -28,7 +28,7 @@ usage() {
     echo "--hash, -hash, -h     : The commit hash to lookup on GitHub."
     echo
     echo "--remote, -remote, -r : The branch to use as the base lookup branch on GitHub."
-    echo '                        Defaults to the value of $GIT_HUB_REMOTE_BRANCH'
+    echo "                        Valid values are of the form 4.2.x, 4.2.3, 5.1.0, 6.0.0, etc."
     echo
     echo "--tag, -tag, -t       : It given, will get the hash of the tag."
     echo "                        Note that this should be thought of as the same as the"
@@ -65,8 +65,15 @@ else
         QUERY+="$FILE"
     fi
 
-    if [ -n "$REMOTE" ]; then
-        REMOTE_BRANCH="$REMOTE"
+    if [[ -n "$REMOTE_BRANCH" ]]; then
+        # Check the first character in the string.
+        case  ${REMOTE_BRANCH:0:1} in
+            4) REMOTE_BRANCH="extjs-$REMOTE_BRANCH" ;;
+            *) REMOTE_BRANCH="sencha-$REMOTE_BRANCH" ;;
+        esac
+    else
+        # Note that this will always default to the latest version.
+        REMOTE_BRANCH="sencha-6.0.x"
     fi
 
     if $BLAME; then

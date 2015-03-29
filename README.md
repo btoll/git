@@ -187,7 +187,7 @@ It's best to show what this tool can do through examples.
 
     `git hub --tag extjs5.1.0`
 
-The file will be opened in the remote branch whose value is in the `GIT_HUB_REMOTE_BRANCH` environment variable unless changed using the `--remote` flag.
+The file will be opened in the sencha-5.0.x remote branch by default unless changed using the `--remote` flag.
 
 ### git-introduced
 
