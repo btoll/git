@@ -9,11 +9,11 @@
 
 git get-hash
 
-    git config --global alias.get-hash '!sh -c '"'git show \$0 | grep commit | cut -c8-'"
+    git config --global alias.get-hash '!sh -c '"'git show \$0 | grep -m 1 commit | cut -c8-'"
 
 git goto
 
-    git config --global alias.goto '!sh -c '"'git show \$0 | grep commit | cut -c8- | xargs git checkout'"
+    git config --global alias.goto '!sh -c '"'git show \$0 | grep -m 1 commit | cut -c8- | xargs git checkout'"
 
 git open
 
