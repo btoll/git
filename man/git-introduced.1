@@ -4,7 +4,7 @@ NAME
         git-introduced - Find the commit(s) that introduced or removed a method or other search pattern.
 
 SYNOPSIS
-        git introduced [ -p pattern ] [ -l location ] [ --open-in-browser ] [ --no-delete-file ]
+        git introduced [ -p pattern ] [ -f file ] [ --format format ] [ --open-in-browser ] [ --no-delete-file ]
 
 DESCRIPTION
         It is basically a wrapper for ```git log -S``` and return the same results, however there are several advantages to it:
@@ -32,7 +32,7 @@ DESCRIPTION
 EXAMPLES
         git introduced --pattern onGridDestroy
         git introduced -p injectLockable --open-in-browser
-        git introduced -pattern onDestroy -location ext/src/grid --no-delete-file
+        git introduced -pattern onDestroy -file ext/src/grid --no-delete-file
         git introduced -p getDragData -l dd | tee my_search_results
 
 AUTHOR

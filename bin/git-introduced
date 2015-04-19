@@ -3,8 +3,8 @@
 # Delimiter.
 D='|'
 FIELDS=("$(tput bold)Hash (short)$(tput sgr0)    -> " "$(tput bold)Author name$(tput sgr0)     -> " "$(tput bold)Author email$(tput sgr0)    -> " "$(tput bold)Commit message$(tput sgr0)  -> " "$(tput bold)Merge date$(tput sgr0)      -> ")
+FILE=
 FORMAT=
-LOCATION=
 DELETE_FILE=true
 OPEN_IN_BROWSER=false
 PATTERN=
@@ -19,18 +19,18 @@ usage() {
     echo "Usage: $0 [args]"
     echo
     echo "Args:"
-    echo "--format, -format, -f      : The format passed to internally to git log --pretty."
-    echo "                             Defaults to '%h %an %ae %s %cd'."
+    echo "--format                 : The format passed to internally to git log --pretty."
+    echo "                           Defaults to '%h %an %ae %s %cd'."
     echo
-    echo "--location, -location, -l  : The location of the file or directory to search. Note that the more specific the location the"
-    echo                               faster the lookup. Default to the current working directory.
+    echo "--file, -file, -f        : The location of the file or directory to search. Note that the more specific the location the"
+    echo                             faster the lookup. Default to the current working directory.
     echo
-    echo "--no-delete-file           : The default is to delete the temporary CSV file used by the tool. Use this flag to override."
+    echo "--no-delete-file         : The default is to delete the temporary CSV file used by the tool. Use this flag to override."
     echo
-    echo "--open-in-browser          : Arguably the coolest feature. This will open the commit on GitHub using the default browser."
-    echo "                             Currently only supported on OS X."
+    echo "--open-in-browser        : Arguably the coolest feature. This will open the commit on GitHub using the default browser."
+    echo "                           Currently only supported on OS X."
     echo
-    echo "--pattern, -pattern, -p    : Specify a pattern (method) that will be the basis of the log history search."
+    echo "--pattern, -pattern, -p  : Specify a pattern (method) that will be the basis of the log history search."
     echo
 }
 
@@ -43,9 +43,9 @@ fi
 while [ "$#" -gt 0 ]; do
     OPT="$1"
     case $OPT in
-        --format|-format|-f) shift; FORMAT=$1 ;;
+        --format) shift; FORMAT=$1 ;;
         -help|-h) usage; exit 0 ;;
-        --location|-location|-l) shift; LOCATION=$1 ;;
+        --file|-file|-f) shift; FILE=$1 ;;
         --no-delete-file) DELETE_FILE=false ;;
         --open-in-browser) OPEN_IN_BROWSER=true ;;
         --pattern|-pattern|-p) shift; PATTERN=$1 ;;
@@ -54,10 +54,10 @@ while [ "$#" -gt 0 ]; do
 done
 
 FORMAT=${FORMAT:-"%h$D%an$D%ae$D%s$D%cd"}
-LOCATION=${LOCATION:=$(pwd)}
+FILE=${FILE:=$(pwd)}
 TMP_FILE="$PATTERN.csv"
 
-git log --pretty="$FORMAT" -S"$PATTERN" -- "$LOCATION" > $TMP_FILE
+git log --pretty="$FORMAT" -S"$PATTERN" -- "$FILE" > $TMP_FILE
 wait
 
 

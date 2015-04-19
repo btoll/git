@@ -197,7 +197,7 @@ Example usages:
 
     git introduced --pattern onGridDestroy
     git introduced -p injectLockable --open-in-browser
-    git introduced -pattern onDestroy -location ext/src/grid --no-delete-file
+    git introduced -pattern onDestroy -file ext/src/grid --no-delete-file
     git introduced -p getDragData -l dd | tee my_search_results
 
 It is basically a wrapper for ```git log -S``` and returns the same results, however there are several advantages to it:
