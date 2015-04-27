@@ -2,7 +2,7 @@
 
 FILES=$(git ls -p debugger)
 if [[ -n "$FILES" ]]; then
-    echo "Error: You have left a debugger statement in the following files:"
+    echo "$(tput setaf 1)[ERROR]$(tput sgr0) You have left a debugger statement in the following files:"
     echo "$FILES"
     exit 1
 fi
