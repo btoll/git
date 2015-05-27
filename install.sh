@@ -5,7 +5,7 @@ echo "$(tput setaf 2)[INFO]$(tput sgr0) Creating global git aliases..."
 git config --global alias.get-hash '!sh -c '"'git show \$0 | grep commit | cut -c8-'"
 git config --global alias.goto '!sh -c '"'git show \$0 | grep commit | cut -c8- | xargs git checkout'"
 
-echo "$(tput setaf 2)[INFO]$(tput sgr0) Creating symbolic links for git extensions..."
+echo "$(tput setaf 2)[INFO]$(tput sgr0) Installing git extensions..."
 echo
 pushd bin
 ln -s "$PWD"/git-cleanup /usr/local/bin/git-cleanup
