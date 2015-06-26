@@ -23,6 +23,10 @@ git open-sha
 
     git config --global alias.open-sha '!sh -c '"'open https://github.com/extjs/SDK/commit/\$0'"
 
+git pre-commit hooks
+
+    git config --global --add hooks.pre-commit.hook "debugger.sh"
+    git config --global --add hooks.pre-commit.hook "EOF.sh"
 
 ### git-cleanup
 

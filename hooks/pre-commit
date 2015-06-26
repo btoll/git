@@ -1,9 +1,17 @@
 #!/bin/bash
+# https://osdir.com/ml/git/2009-01/msg00298.html
 
-FILES=$(git ls -p debugger)
-if [[ -n "$FILES" ]]; then
-    echo "$(tput setaf 1)[ERROR]$(tput sgr0) You have left a debugger statement in the following files:"
-    echo "$FILES"
-    exit 1
-fi
+STR=$(git config --get-all hooks.pre-commit.hook)
+
+for HOOK in $STR; do
+    sh "$SDK5/.git/hooks/pre-commit.d/$HOOK"
+
+    if [ "$?" -eq 1 ]; then
+        exit 1
+    else
+        # Separate the hooks by an empty line.
+        echo
+    fi
+
+done
 
