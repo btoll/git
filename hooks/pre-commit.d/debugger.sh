@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FILES=$(git diff-index --cached --name-only HEAD | xargs ack "^\s+debugger")
+FILES=$(git diff-index --cached --name-only HEAD | xargs ack "^\s*debugger;?\b")
 
 echo "$(tput setab 7)$(tput setaf 4)[INFO]$(tput sgr0) Running $(tput bold)debugger$(tput sgr0) pre-commit hook..."
 

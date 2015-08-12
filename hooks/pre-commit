@@ -4,7 +4,7 @@
 STR=$(git config --get-all hooks.pre-commit.hook)
 
 for HOOK in $STR; do
-    sh "$SDK5/.git/hooks/pre-commit.d/$HOOK"
+    sh "./.git/hooks/pre-commit.d/$HOOK"
 
     if [ "$?" -eq 1 ]; then
         exit 1
