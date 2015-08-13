@@ -1,16 +1,20 @@
 #!/bin/bash
 
-FILES=$(git diff-index --cached --name-only HEAD | xargs ack "^\s*debugger;?\b")
+EXIT_CODE=0
+FILES=$(git diff-index --cached --name-only HEAD)
 
 echo "$(tput setab 7)$(tput setaf 4)[INFO]$(tput sgr0) Running $(tput bold)debugger$(tput sgr0) pre-commit hook..."
 
-if [[ -n "$FILES" ]]; then
-    echo "\t$(tput setaf 1)[ERROR]$(tput sgr0) You have left a debugger statement in the following files:"
-    echo "\t\t$FILES\n"
-    exit 1
+for F in $FILES; do
+    if [[ $(gawk '/^\s*debugger;?\y/' $F) ]]; then
+        echo "\t$(tput setaf 1)[ERROR]$(tput sgr0) The script $F contains an uncommented debugger statement."
+        EXIT_CODE=1
+    fi
+done
+
+if [ "$EXIT_CODE" -eq 0 ]; then
+    echo "$(tput setab 7)$(tput setaf 2)[INFO]$(tput sgr0) Completed successfully."
 fi
 
-echo "$(tput setab 7)$(tput setaf 2)[INFO]$(tput sgr0) Completed successfully."
-
-exit 0
+exit $EXIT_CODE
 
