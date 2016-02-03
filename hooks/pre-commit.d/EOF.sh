@@ -6,13 +6,23 @@ FILES=$(git diff-index --cached --name-only HEAD)
 echo "$(tput setab 7)$(tput setaf 4)[INFO]$(tput sgr0) Running $(tput bold)EOF$(tput sgr0) pre-commit hook..."
 
 for F in $FILES; do
-    if [ $(awk 'END{print ($0=="")}' $F) == 0 ]; then
+    MIMETYPE=$(file --mime-type -b "$F")
+
+    if [[
+        ( $MIMETYPE == image/gif ) ||
+        ( $MIMETYPE == image/jpg ) ||
+        ( $MIMETYPE == image/png )
+    ]]; then
+        continue
+    fi
+
+    if [[ $(awk 'END{print ($0=="")}' $F) == 0 ]]; then
         echo "\t$(tput setaf 1)[ERROR]$(tput sgr0) The script $F does not end with a blank line."
         EXIT_CODE=1
     fi
 done
 
-if [ "$EXIT_CODE" -eq 0 ]; then
+if [[ $EXIT_CODE -eq 0 ]]; then
     echo "$(tput setab 7)$(tput setaf 2)[INFO]$(tput sgr0) Completed successfully."
 fi
 
