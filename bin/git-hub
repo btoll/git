@@ -1,8 +1,7 @@
 #!/bin/bash
 
 BLAME=false
-BLOB_URL=https://github.com/extjs/SDK/blob/
-BLAME_URL=https://github.com/extjs/SDK/blame/
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
 COMMIT=
 FILE=
 HASH=
@@ -27,14 +26,39 @@ usage() {
     echo
     echo "--hash, -hash, -h     : The commit hash to lookup on GitHub."
     echo
+    echo "-help                 : Help."
+    echo
     echo "--remote, -remote, -r : The branch to use as the base lookup branch on GitHub."
-    echo "                        Valid values are of the form 4.2.x, 4.2.3, 5.1.0, 6.0.0, etc."
     echo
     echo "--tag, -tag, -t       : It given, will get the hash of the tag."
     echo "                        Note that this should be thought of as the same as the"
     echo "                        hash option."
     echo
 }
+
+setGitHubUrl() {
+    GITHUB_URL=$(git ls-remote --get-url)
+
+    # If $GITHUB_URL begins with "git", i.e., git@github.com:btoll/utley
+    if [[ "$GITHUB_URL" == git* ]]; then
+        # Replaces first match of ":" with "/".
+        URL=${GITHUB_URL/://}
+
+        # Replaces first match of "git@" with "https://".
+        URL=${URL/git@/https://}
+    fi
+
+    # If $URL ends with ".git", i.e., btoll/stymie.git
+    if [[ "$URL" == *.git ]]; then
+        # Cut ".git"
+        URL=${URL%.git}
+    fi
+}
+
+if [ "$#" -eq 0 ]; then
+    usage
+    exit 0
+fi
 
 # Swap out for user-provided options if given.
 while [ "$#" -gt 0 ]; do
@@ -51,14 +75,17 @@ while [ "$#" -gt 0 ]; do
     shift
 done
 
+setGitHubUrl
+
 if [[ ( -n "$HASH" ) || ( -n "$COMMIT" ) ]]; then
     # If given a topic branch or tag, simply get its hash.
     if [[ -n "$COMMIT" ]]; then
         HASH=$(git show "$COMMIT" | grep commit | awk '{print $2}')
     fi
 
-    URL="https://github.com/extjs/SDK/commit/$HASH"
+    URL="$URL/commit/$HASH"
 else
+    # TODO: Is this needed anymore?
     QUERY=$(git rev-parse --show-prefix)
 
     if [ -n "$FILE" ]; then
@@ -66,20 +93,13 @@ else
     fi
 
     if [[ -n "$REMOTE_BRANCH" ]]; then
-        # Check the first character in the string.
-        case  ${REMOTE_BRANCH:0:1} in
-            4) REMOTE_BRANCH="extjs-$REMOTE_BRANCH" ;;
-            *) REMOTE_BRANCH="sencha-$REMOTE_BRANCH" ;;
-        esac
-    else
-        # Note that this will always default to the latest version.
-        REMOTE_BRANCH="sencha-6.0.x"
+        BRANCH="$REMOTE_BRANCH"
     fi
 
     if $BLAME; then
-        URL="$BLAME_URL$REMOTE_BRANCH/$QUERY"
+        URL="$URL/blame/$BRANCH/$QUERY"
     else
-        URL="$BLOB_URL$REMOTE_BRANCH/$QUERY"
+        URL="$URL/blob/$BRANCH/$QUERY"
     fi
 fi
 
