@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Delimiter.
-D='|'
+DELIMITER='|'
 FIELDS=("$(tput bold)Hash (short)$(tput sgr0)    -> " "$(tput bold)Author name$(tput sgr0)     -> " "$(tput bold)Author email$(tput sgr0)    -> " "$(tput bold)Commit message$(tput sgr0)  -> " "$(tput bold)Merge date$(tput sgr0)      -> ")
 FILE=
 FORMAT=
@@ -27,11 +27,30 @@ usage() {
     echo
     echo "--no-delete-file         : The default is to delete the temporary CSV file used by the tool. Use this flag to override."
     echo
-    echo "--open-in-browser        : Arguably the coolest feature. This will open the commit on GitHub using the default browser."
+    echo "--open-in-browser        : Ope the commit on GitHub using the default browser."
     echo "                           Currently only supported on OS X."
     echo
     echo "--pattern, -pattern, -p  : Specify a pattern (method) that will be the basis of the log history search."
     echo
+}
+
+setGitHubUrl() {
+    GITHUB_URL=$(git ls-remote --get-url)
+
+    # If $GITHUB_URL begins with "git", i.e., git@github.com:btoll/utley
+    if [[ "$GITHUB_URL" == git* ]]; then
+        # Replaces first match of ":" with "/".
+        URL=${GITHUB_URL/://}
+
+        # Replaces first match of "git@" with "https://".
+        URL=${URL/git@/https://}
+    fi
+
+    # If $URL ends with ".git", i.e., btoll/stymie.git
+    if [[ "$URL" == *.git ]]; then
+        # Cut ".git"
+        URL=${URL%.git}
+    fi
 }
 
 if [ $# -eq 0 ]; then
@@ -53,17 +72,18 @@ while [ "$#" -gt 0 ]; do
     shift
 done
 
-FORMAT=${FORMAT:-"%h$D%an$D%ae$D%s$D%cd"}
+FORMAT=${FORMAT:-"%h$DELIMITER%an$DELIMITER%ae$DELIMITER%s$DELIMITER%cd"}
 FILE=${FILE:=$(pwd)}
 TMP_FILE="$PATTERN.csv"
 
 git log --pretty="$FORMAT" -S"$PATTERN" -- "$FILE" > $TMP_FILE
 wait
 
-
 # Save previous (global) IFS.
 PREV_IFS="$IFS"
-IFS="$D"
+IFS="$DELIMITER"
+
+setGitHubUrl
 
 while read LINE
 do
@@ -71,13 +91,13 @@ do
     read -r -a ARR <<<"$LINE"
 
     # We need to grab the hash to properly build the URL.
-    URL="https://github.com/extjs/SDK/commit/${ARR[0]}"
+    URL="$URL/commit/${ARR[0]}"
 
     # Add the search pattern.
     FIELDS[5]="$(tput bold)Search pattern$(tput sgr0)  ->  $PATTERN"
 
     # We can only now add the last array element now that we have the SHA from each search result.
-    FIELDS[6]="$(tput bold)Url$(tput sgr0)             ->  $URL"
+    FIELDS[6]="$(tput bold)URL$(tput sgr0)             ->  $URL"
 
     # For formatting between search results.
     echo
