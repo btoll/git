@@ -9,15 +9,15 @@
 
 git get-hash
 
-    git config --global alias.get-hash '!sh -c '"'git show \$0 | grep -m 1 commit | cut -c8-'"
+    git config --global alias.get-hash rev-parse
 
 git goto
 
-    git config --global alias.goto '!sh -c '"'git show \$0 | grep -m 1 commit | cut -c8- | xargs git checkout'"
+    git config --global alias.goto '!sh -c '"'git rev-parse \$0 | xargs git checkout'"
 
 git open
 
-    git config --global alias.open '!f()'" { SHA=\$(git get-hash \$1); open https://github.com/extjs/SDK/commit/\$SHA; }; f"
+    git config --global alias.open '!f()'" { SHA=\$(git rev-parse \$0); open https://github.com/extjs/SDK/commit/\$SHA; }; f"
 
 git open-sha
 

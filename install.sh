@@ -2,8 +2,8 @@
 # Installation script for custom Git extensions and aliases.
 
 echo "$(tput setaf 2)[INFO]$(tput sgr0) Creating global git aliases..."
-git config --global alias.get-hash '!sh -c '"'git show \$0 | grep commit | cut -c8-'"
-git config --global alias.goto '!sh -c '"'git show \$0 | grep commit | cut -c8- | xargs git checkout'"
+git config --global alias.get-hash rev-parse
+git config --global alias.goto '!sh -c '"'git rev-parse \$0 | xargs git checkout'"
 git config --global --add hooks.pre-commit.hook "EOF.sh"
 git config --global --add hooks.pre-commit.hook "debugger.sh"
 git config --global --add hooks.pre-commit.hook "eslint.sh"
