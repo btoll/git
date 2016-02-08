@@ -1,13 +1,30 @@
 #!/bin/bash
-
+#
+# http://stackoverflow.com/a/15802301
+#
+# Note that if listing a directory, Git Hub will replace the word
+# 'blob' in the url with 'tree', e.g.:
+#
+# https://github.com/btoll/git/blob/master/bin
+# becomes
+# https://github.com/btoll/git/tree/master/bin
+#
+# and vice-versa if viewing a file (i.e., 'tree' => 'blob').
+#
 BLAME=false
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
-COMMIT=
 FILE=
+GET_HASH=
 HASH=
-QUERY=
+REL_PATH=
 REMOTE_BRANCH=
+TOKEN=
 URL=
+
+if $(git rev-parse --is-inside-git-dir); then
+    echo "[ERROR]: Cannot view contents of .git/!"
+    exit 1
+fi
 
 usage() {
     echo "GIT-HUB"
@@ -15,24 +32,23 @@ usage() {
     echo "Usage: $0 [args]"
     echo
     echo "Args:"
-    echo "--blame, -blame       : If given will open the branch in the Blame view."
-    echo "                        Not applicable if given a topic branch or hash."
+    echo "--blame     : If given will open the branch in the Blame view."
+    echo "                     Not applicable if given a topic branch or hash."
     echo
-    echo "--branch, -branch, -b : If given, will get the hash of the local topic branch."
-    echo "                        Note that this should be thought of as the same as the"
-    echo "                        hash option."
+    echo "--branch    : The branch to use as the base lookup branch on GitHub."
     echo
-    echo "--file, -file, -f     : The file to lookup on GitHub. Accepts relative paths."
+    echo "--file, -f  : The file to lookup on GitHub. Accepts relative paths."
     echo
-    echo "--hash, -hash, -h     : The commit hash to lookup on GitHub."
+    echo "--get-hash  : A branch name can be given instead of a hash. If so,"
+    echo "              this flag will get the hash of the branch, tag, etc."
+    echo "              For example:"
     echo
-    echo "-help                 : Help."
+    echo "                  git hub --get-hash MY_COOL_TOPIC_BRANCH"
+    echo "                  git hub --get-hash MY_TAG"
     echo
-    echo "--remote, -remote, -r : The branch to use as the base lookup branch on GitHub."
+    echo "--hash      : The commit hash to lookup on GitHub."
     echo
-    echo "--tag, -tag, -t       : It given, will get the hash of the tag."
-    echo "                        Note that this should be thought of as the same as the"
-    echo "                        hash option."
+    echo "-h          : Help."
     echo
 }
 
@@ -55,54 +71,47 @@ setGitHubUrl() {
     fi
 }
 
-if [ "$#" -eq 0 ]; then
-    usage
-    exit 0
-fi
-
 # Swap out for user-provided options if given.
 while [ "$#" -gt 0 ]; do
-    OPT="$1"
-    case $OPT in
-        --blame|-blame) BLAME=true ;;
-        --branch|-branch|-b) shift; COMMIT=$1 ;;
-        --file|-file|-f) shift; FILE=$1 ;;
-        --hash|-hash|-h) shift; HASH=$1 ;;
-        -help) usage; exit 0 ;;
-        --remote|-remote|-r) shift; REMOTE_BRANCH=$1 ;;
-        --tag|-tag|-t) shift; COMMIT=$1 ;;
+    case "$1" in
+        --blame) BLAME=true ;;
+        --branch) shift; REMOTE_BRANCH=$1 ;;
+        --file|-f) shift; FILE=$1 ;;
+        --get-hash) shift; GET_HASH=$1 ;;
+        --hash) shift; HASH=$1 ;;
+        -h) usage; exit 0 ;;
     esac
     shift
 done
 
 setGitHubUrl
 
-if [[ ( -n "$HASH" ) || ( -n "$COMMIT" ) ]]; then
-    # If given a topic branch or tag, simply get its hash.
-    if [[ -n "$COMMIT" ]]; then
-        HASH=$(git show "$COMMIT" | grep commit | awk '{print $2}')
+if [[ ( -n "$HASH" ) || ( -n "$GET_HASH" ) ]]; then
+    # If given a branch name or tag, simply get its hash.
+    if [[ -n "$GET_HASH" ]]; then
+        HASH=$(git rev-parse $GET_HASH)
     fi
 
     URL="$URL/commit/$HASH"
 else
-    # TODO: Is this needed anymore?
-    QUERY=$(git rev-parse --show-prefix)
+    # Get the path of the cwd relative to the top-level dir.
+    REL_PATH=$(git rev-parse --show-prefix)
 
     if [ -n "$FILE" ]; then
-        QUERY+="$FILE"
+        REL_PATH+="$FILE"
     fi
 
     if [[ -n "$REMOTE_BRANCH" ]]; then
         BRANCH="$REMOTE_BRANCH"
     fi
 
-    if $BLAME; then
-        URL="$URL/blame/$BRANCH/$QUERY"
-    else
-        URL="$URL/blob/$BRANCH/$QUERY"
+    # If the relative path is empty, then we know that it's the top-level dir.
+    # In this case, don't futz with the url.
+    if [ -n "$REL_PATH" ]; then
+        TOKEN=$($BLAME && echo "blame" || echo "blob")
+        URL="$URL/$TOKEN/$BRANCH/$REL_PATH"
     fi
 fi
 
-echo "$URL"
-open "$URL"
+echo "$URL" && open "$URL"
 

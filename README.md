@@ -173,25 +173,23 @@ It's best to show what this tool can do through examples.
 
 - Open the file in a blame view:
 
-    `git hub -file grid/header/Container -blame`
+    `git hub -f grid/header/Container --blame`
 
-- Open the file in a remote branch other than the default:
+- Open the file in a remote branch other than the one that is currently checked out:
 
-    `git hub -remote extjs-4.2.x -f Component.js`
+    `git hub --branch extjs-4.2.x -f Component.js`
 
 - Open the commit hash:
 
-    `git hub -hash b51abf6f38902`
+    `git hub --hash b51abf6f38902`
 
 - Open the commit hash to which the local topic branch points:
 
-    `git hub --branch EXTJS-15755`
+    `git hub --get-hash EXTJS-15755`
 
 - Open the commit hash to which the tag points:
 
-    `git hub --tag extjs5.1.0`
-
-The file will be opened in the sencha-5.0.x remote branch by default unless changed using the `--remote` flag.
+    `git hub --get-hash extjs5.1.0`
 
 ### git-introduced
 
