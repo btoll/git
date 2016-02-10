@@ -16,6 +16,7 @@ BRANCH=$(git rev-parse --abbrev-ref HEAD)
 FILE=
 GET_HASH=
 HASH=
+RANGE=
 REL_PATH=
 REMOTE_BRANCH=
 TOKEN=
@@ -50,6 +51,9 @@ usage() {
     echo
     echo "-h          : Help."
     echo
+    echo "--range     : Specify in the format 'L10-L20' to highlight a visual range"
+    echo "              on GitHub."
+    echo
 }
 
 setGitHubUrl() {
@@ -80,6 +84,7 @@ while [ "$#" -gt 0 ]; do
         --get-hash) shift; GET_HASH=$1 ;;
         --hash) shift; HASH=$1 ;;
         -h) usage; exit 0 ;;
+        --range) shift; RANGE=$1 ;;
     esac
     shift
 done
@@ -92,7 +97,7 @@ if [[ ( -n "$HASH" ) || ( -n "$GET_HASH" ) ]]; then
         HASH=$(git rev-parse $GET_HASH)
     fi
 
-    URL="$URL/commit/$HASH"
+    URL+="/commit/$HASH"
 else
     # Get the path of the cwd relative to the top-level dir.
     REL_PATH=$(git rev-parse --show-prefix)
@@ -109,8 +114,12 @@ else
     # In this case, don't futz with the url.
     if [ -n "$REL_PATH" ]; then
         TOKEN=$($BLAME && echo "blame" || echo "blob")
-        URL="$URL/$TOKEN/$BRANCH/$REL_PATH"
+        URL+="/$TOKEN/$BRANCH/$REL_PATH"
     fi
+fi
+
+if [ -n "$RANGE" ]; then
+    URL+="#$RANGE"
 fi
 
 echo "$URL" && open "$URL"
