@@ -39,6 +39,8 @@ usage() {
     echo "                                h = horizontally-split windows"
     echo "                                t = tabs"
     echo "                                v = vertically-split windows"
+    echo "                            Defaults to 'b'."
+    echo
     echo "                            Note that if a pattern is given that only the files that match this pattern"
     echo "                            will be opened in Vim."
     echo
@@ -60,6 +62,7 @@ while [ "$#" -gt 0 ]; do
                 h) VIM="-o" ;;
                 t) VIM="-p" ;;
                 v) VIM="-O" ;;
+                *) VIM=" " ;;
             esac
             ;;
         -help|-h) usage; exit 0 ;;
