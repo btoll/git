@@ -1,59 +1,60 @@
 #!/bin/bash
 # Get up and running quickly with the versioned files that make up the last commit.
-# If not given any arguments, `bootstrap` will assume the current topic branch.
+# If not given any arguments, `git-bootstrap` will assume the current topic branch.
 
-# Note the dependencies on the `git-ls` extension:
+# Note the dependency on the `git-ls` extension:
 # https://github.com/btoll/git/blob/master/bin/git-ls
+
+# This script is just basically a nice front-end to `git ls`.
 
 # TODO fix errors when non-existent branch
 BRANCH=
 FILES=
 SHA=
+# Note this will default to using buffers with only one window view.
+VIM="b"
 
-if [ $? -eq 0 ]; then
-    usage() {
-        echo "bootstrap"
-        echo
-        echo "Usage: $0 [args]"
-        echo
-        echo "Args:"
-        echo "--branch, -b   : If the branch name is different from the ticket name, specify the branch name"
-        echo "                 using this flag."
-        echo
-        echo "Note if no arguments are passed, the current branch name will be assumed as the name of the ticket."
-    }
+usage() {
+    echo "git-bootstrap"
+    echo
+    echo "Usage: $0 [args]"
+    echo
+    echo "Args:"
+    echo "--branch, -b    : If the branch name is different from the ticket name,"
+    echo "                  specify the branch name using this flag."
+    echo "--help, -h      : Help"
+    echo "--split, -sp    : Open files in a horizontal split."
+    echo "--tabs, -p      : Open files in tabs."
+    echo "--vsplit, -vsp  : Open files in a vertical split."
+    echo
+    echo "Note if no arguments are passed, the current branch name will be assumed."
+}
 
-    # http://stackoverflow.com/a/14127035/125349
-    if [ $PWD != $(git rev-parse --show-toplevel) ]; then
-        echo "$(tput setaf 3)[WARNING]$(tput sgr0) You need to run this command from the toplevel of the working tree."
-        exit 1
-    fi
-
-    # Allow `bootstrap` to be called w/o any args, will assume the current topic branch.
-
-    if [ "$#" -gt 0 ]; then
-        while [ "$#" -gt 0 ]; do
-            OPT="$1"
-            case $OPT in
-                --branch|-b) shift; BRANCH=$1 ;;
-                --help|-h) usage; exit 0 ;;
-            esac
-            shift
-        done
-    fi
-
-    # If no branch, let's assume the current one.
-    if [ -z "$BRANCH" ]; then
-        BRANCH=$(git rev-parse --abbrev-ref HEAD)
-    fi
-
-    SHA=$(git rev-parse "$BRANCH")
-
-    # We need a space here to separate the test case from the files returned by git-ls.
-    FILES+=" "$(git ls --commit "$SHA")
-
-    vim $FILES
+# http://stackoverflow.com/a/14127035/125349
+if [ "$PWD" != $(git rev-parse --show-toplevel) ]; then
+    echo "$(tput setaf 3)[WARNING]$(tput sgr0) You need to run this command from the toplevel of the working tree."
+    exit 1
 fi
 
-exit
+if [ "$#" -gt 0 ]; then
+    while [ "$#" -gt 0 ]; do
+        OPT="$1"
+        case "$OPT" in
+            --branch|-b) shift; BRANCH="$OPT" ;;
+            --help|-h) usage; exit 0 ;;
+            --split|-sp) VIM="h" ;;
+            --tabs|-p) VIM="t" ;;
+            --vsplit|-vsp) VIM="v" ;;
+        esac
+        shift
+    done
+fi
+
+# If no branch, let's assume the current one.
+if [ -z "$BRANCH" ]; then
+    BRANCH=$(git rev-parse --abbrev-ref HEAD)
+fi
+
+SHA=$(git rev-parse "$BRANCH")
+git ls --commit "$SHA" --edit "$VIM"
 

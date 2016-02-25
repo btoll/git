@@ -28,6 +28,9 @@ git pre-commit hooks
     git config --global --add hooks.pre-commit.hook "debugger.sh"
     git config --global --add hooks.pre-commit.hook "EOF.sh"
 
+### git-bootstrap
+TODO
+
 ### git-cleanup
 
 This script will delete any git branch, both locally and remotely, that has been merged or unmerged and that matches the filtered search.
