@@ -7,6 +7,7 @@ git config --global --unset alias.goto
 
 echo "$(tput setaf 2)[INFO]$(tput sgr0) Removing symbolic links for git extensions..."
 echo
+rm /usr/local/bin/git-bootstrap
 rm /usr/local/bin/git-cleanup
 rm /usr/local/bin/git-hub
 rm /usr/local/bin/git-introduced
