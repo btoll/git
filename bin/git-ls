@@ -3,10 +3,6 @@
 
 # TODO:
 # 1. Use an environment variable when checking if the cwd matches the top-level directory of the repo.
-#    Currently, it's assuming SDK.*
-
-CMD_DIRTY="git diff-index --name-only"
-CMD_LAST="git diff-tree --no-commit-id --name-only -r"
 CMD=
 COMMIT="HEAD"
 DIRTY=false
@@ -14,50 +10,52 @@ MSG=
 PATTERN=
 VIM=
 
-check_pwd() {
+check_cwd() {
     # http://stackoverflow.com/a/14127035/125349
-    if [ $PWD != $(git rev-parse --show-toplevel) ]; then
+    if [ "$PWD" != $(git rev-parse --show-toplevel) ]; then
         echo "$(tput setaf 3)[WARNING]$(tput sgr0) You need to run this command from the toplevel of the working tree."
         exit 1
     fi
 }
 
 usage() {
-    echo "GIT-LS"
+    echo "git-ls"
     echo
     echo "Usage: $0 [args]"
     echo
     echo "Args:"
-    echo "--commit, -commit, -c     : Use this commit to determine which files are shown (defaults to HEAD)."
+    echo "--commit, -c   : Use this commit to determine which files are shown"
+    echo "                 (defaults to HEAD)."
     echo
-    echo "--dirty, -dirty, -d       : List the files that are currently staged and modified in the workspace."
-    echo "                            If not specified it will default to list the files that make up the last"
-    echo '                            commit (determined by $COMMIT).'
+    echo "--dirty, -d    : List the files that are currently staged and modified"
+    echo "                 in the workspace. If not specified, it will default"
+    echo "                 to list the files that make up the last commit"
+    echo "                 (determined by $COMMIT)."
     echo
-    echo "--edit, -edit, -e         : Open all listed files in Vim using:"
-    echo "                                b = no windows (just buffers)"
-    echo "                                h = horizontally-split windows"
-    echo "                                t = tabs"
-    echo "                                v = vertically-split windows"
-    echo "                            Defaults to 'b'."
+    echo "--edit, -e     : Open all listed files in Vim using:"
+    echo "                     b = one window (just buffers)"
+    echo "                     h = horizontally-split windows"
+    echo "                     t = tabs"
+    echo "                     v = vertically-split windows"
+    echo "                     Defaults to 'b'."
     echo
-    echo "                            Note that if a pattern is given that only the files that match this pattern"
-    echo "                            will be opened in Vim."
+    echo "                 Note that if a pattern is given that only the files"
+    echo "                 that match this pattern will be opened in Vim."
     echo
-    echo "--pattern, -pattern, -p   : Specify a pattern that will be used to search through all the files that make"
-    echo "                            up the commit."
+    echo "--pattern, -p  : Specify a pattern that will be used to search through"
+    echo "                 all the files that make up the commit."
     echo
 }
 
 # Swap out for user-provided options if given.
 while [ "$#" -gt 0 ]; do
     OPT="$1"
-    case $OPT in
-        --commit|-commit|-c) shift; COMMIT=$1 ;;
-        --dirty|-dirty|-d) DIRTY=true;;
-        --edit|-edit|-e)
+    case "$OPT" in
+        --commit|-c) shift; COMMIT="$1" ;;
+        --dirty|-d) DIRTY=true;;
+        --edit|-e)
             shift
-            case $1 in
+            case "$1" in
                 b) VIM=" " ;;
                 h) VIM="-o" ;;
                 t) VIM="-p" ;;
@@ -66,17 +64,17 @@ while [ "$#" -gt 0 ]; do
             esac
             ;;
         -help|-h) usage; exit 0 ;;
-        --pattern|-pattern|-p) shift; PATTERN=$1 ;;
+        --pattern|-p) shift; PATTERN="$1" ;;
     esac
     shift
 done
 
 # To get a list of the files that differ from HEAD (both staged and modified).
 if $DIRTY; then
-    CMD="$CMD_DIRTY $COMMIT"
+    CMD="git diff-index --name-only $COMMIT"
     MSG="Files that are staged or modified in your workspace:"
 else
-    CMD="$CMD_LAST $COMMIT"
+    CMD="git diff-tree --no-commit-id --name-only -r $COMMIT"
     MSG="Files that made up your last commit:"
 fi
 
@@ -86,19 +84,21 @@ fi
 #fi
 
 if [ -n "$PATTERN" ]; then
-    check_pwd
+    check_cwd
 
     # The `-l` switch only displays the file name.
-    CMD="$CMD | xargs grep -l $PATTERN"
+    # The `-w` switch only matches whole words.
+    CMD="$CMD | xargs ag -lw $PATTERN"
 fi
 
 if [ -n "$VIM" ]; then
-    check_pwd
+    check_cwd
 
     # http://stackoverflow.com/a/16579925
     CMD='vim '"$VIM"' $('"$CMD"')'
+else
+    echo "$MSG"
 fi
 
-#echo $MSG
-eval $CMD
+eval "$CMD"
 
