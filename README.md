@@ -251,7 +251,7 @@ It's best to show what this tool can do through examples.
 
 - Opens all listed files in Vim (in buffers).
 
-    `git ls -edit b`
+    `git ls --edit b`
 
 - Opens all listed files for the specified hash (cf457b6) in horizontally-split windows.
 
@@ -259,7 +259,7 @@ It's best to show what this tool can do through examples.
 
 - Opens all listed files for the specified hash (cf457b6) that match that specified regular expression in horizontally-split windows.
 
-    `git ls -c cf457b6 -pattern debugger -e h`
+    `git ls -c cf457b6 --pattern debugger -e h`
 
 ### git-review
 
