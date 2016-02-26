@@ -67,7 +67,7 @@ while [ "$#" -gt 0 ]; do
     shift
 done
 
-if [ -n "$RECURSE" ]; then
+if [ -n "$RECURSE" ] && [ "$RECURSE" -gt 0 ]; then
 #    Doing `git ls -r 3` will construct the following command behind the scenes:
 #
 #        (

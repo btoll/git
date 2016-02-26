@@ -1,18 +1,17 @@
 #!/bin/bash
-# Get up and running quickly with the versioned files that make up the last commit.
-# If not given any arguments, `git-bootstrap` will assume the current topic branch.
+# Get up and running quickly with the versioned files that make up the a commit.
+# If not given any arguments, `git-bootstrap` will assume the last commit.
 
 # Note the dependency on the `git-ls` extension:
 # https://github.com/btoll/git/blob/master/bin/git-ls
 
 # This script is just basically a nice front-end to `git ls`.
 
-# TODO fix errors when non-existent branch
-BRANCH=
-FILES=
-RECURSE=
-SHA=
-# Note this will default to using buffers with only one window view.
+# Use sensible defaults.
+COMMIT="HEAD"
+# Only boostrapping the files of the last commit.
+RECURSE="0"
+# Use buffers with only one window view.
 VIM="b"
 
 usage() {
@@ -21,15 +20,14 @@ usage() {
     echo "Usage: $0 [args]"
     echo
     echo "Args:"
-    echo "--branch, -b    : If the branch name is different from the ticket name,"
-    echo "                  specify the branch name using this flag."
-    echo "--help, -h      : Help"
-    echo "--recurse, -r   : Get files from more than one commit."
-    echo "--split, -sp    : Open files in a horizontal split."
-    echo "--tabs, -p      : Open files in tabs."
-    echo "--vsplit, -vsp  : Open files in a vertical split."
+    echo "--commit, -c         : The commit from which to get the files."
+    echo "--help, -h           : Help."
+    echo "--recurse, -r        : Get files from more than one commit."
+    echo "--split, --sp, -h    : Open files in a horizontal split."
+    echo "--tabs, --tab, -p    : Open files in tabs."
+    echo "--vsplit, --vsp, -v  : Open files in a vertical split."
     echo
-    echo "Note if no arguments are passed, the current branch name will be assumed."
+    echo "Note if no arguments are passed, the last commit will be assumed."
 }
 
 # http://stackoverflow.com/a/14127035/125349
@@ -42,27 +40,16 @@ if [ "$#" -gt 0 ]; then
     while [ "$#" -gt 0 ]; do
         OPT="$1"
         case "$OPT" in
-            --branch|-b) shift; BRANCH="$1" ;;
+            --commit|-c) shift; COMMIT="$1" ;;
             --help|-h) usage; exit 0 ;;
             --recurse|-r) shift; RECURSE="$1" ;;
-            --split|-sp) VIM="h" ;;
-            --tabs|-p) VIM="t" ;;
-            --vsplit|-vsp) VIM="v" ;;
+            --split|--sp|-h) VIM="h" ;;
+            --tabs|--tab|-p) VIM="t" ;;
+            --vsplit|--vsp|-v) VIM="v" ;;
         esac
         shift
     done
 fi
 
-# If no branch, let's assume the current one.
-if [ -z "$BRANCH" ]; then
-    BRANCH=$(git rev-parse --abbrev-ref HEAD)
-fi
-
-SHA=$(git rev-parse "$BRANCH")
-
-if [ -n "$RECURSE" ]; then
-    git ls --commit "$SHA" --edit "$VIM" --recurse "$RECURSE"
-else
-    git ls --commit "$SHA" --edit "$VIM"
-fi
+git ls --edit "$VIM" --recurse "$RECURSE" --commit "$COMMIT"
 
