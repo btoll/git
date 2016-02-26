@@ -40,7 +40,7 @@ if [ "$#" -gt 0 ]; then
     while [ "$#" -gt 0 ]; do
         OPT="$1"
         case "$OPT" in
-            --branch|-b) shift; BRANCH="$OPT" ;;
+            --branch|-b) shift; BRANCH="$1" ;;
             --help|-h) usage; exit 0 ;;
             --split|-sp) VIM="h" ;;
             --tabs|-p) VIM="t" ;;
