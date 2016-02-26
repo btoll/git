@@ -1,12 +1,9 @@
-#!/bin/bash # https://stackoverflow.com/questions/424071/list-all-the-files-for-a-commit-in-git
-# https://stackoverflow.com/questions/3882838/whats-an-easy-way-to-detect-modified-files-in-a-git-workspace
+#!/bin/bash
 
-# TODO:
-# 1. Use an environment variable when checking if the cwd matches the top-level directory of the repo.
 CMD=
 COMMIT="HEAD"
 DIRTY=false
-MSG=
+GET_COMMITTED_FILES_CMD="git diff-tree --no-commit-id --name-only -r"
 PATTERN=
 VIM=
 
@@ -52,7 +49,7 @@ while [ "$#" -gt 0 ]; do
     OPT="$1"
     case "$OPT" in
         --commit|-c) shift; COMMIT="$1" ;;
-        --dirty|-d) DIRTY=true;;
+        --dirty|-d) DIRTY=true ;;
         --edit|-e)
             shift
             case "$1" in
@@ -65,23 +62,39 @@ while [ "$#" -gt 0 ]; do
             ;;
         -help|-h) usage; exit 0 ;;
         --pattern|-p) shift; PATTERN="$1" ;;
+        --recurse|-r) shift; RECURSE="$1" ;;
     esac
     shift
 done
 
-# To get a list of the files that differ from HEAD (both staged and modified).
-if $DIRTY; then
-    CMD="git diff-index --name-only $COMMIT"
-    MSG="Files that are staged or modified in your workspace:"
-else
-    CMD="git diff-tree --no-commit-id --name-only -r $COMMIT"
-    MSG="Files that made up your last commit:"
-fi
+if [ -n "$RECURSE" ]; then
+#    Doing `git ls -r 3` will construct the following command behind the scenes:
+#
+#        (
+#         git diff-tree --no-commit-id --name-only -r HEAD ;
+#         git diff-tree --no-commit-id --name-only -r HEAD^ ;
+#         git diff-tree --no-commit-id --name-only -r HEAD^^ ;
+#        ) | sort | uniq
+#
+    COUNTER=0
+    GROUP="("
+    LEVEL=""
 
-#if [ "$($CMD | wc -l)" -eq "0" ]; then
-#    echo "[git-ls] There is nothing to list."
-#    exit 0
-#fi
+    while [[ "$COUNTER" -lt "$RECURSE" ]]; do
+       GROUP+=" $GET_COMMITTED_FILES_CMD HEAD$LEVEL ;"
+       COUNTER=$(( $COUNTER + 1 ))
+       LEVEL+="^"
+    done
+
+    CMD="$GROUP ) | sort | uniq"
+else
+    # To get a list of the files that differ from HEAD (both staged and modified).
+    if $DIRTY; then
+        CMD="git diff-index --name-only $COMMIT"
+    else
+        CMD="$GET_COMMITTED_FILES_CMD $COMMIT"
+    fi
+fi
 
 if [ -n "$PATTERN" ]; then
     check_cwd
@@ -93,11 +106,7 @@ fi
 
 if [ -n "$VIM" ]; then
     check_cwd
-
-    # http://stackoverflow.com/a/16579925
     CMD='vim '"$VIM"' $('"$CMD"')'
-else
-    echo "$MSG"
 fi
 
 eval "$CMD"
