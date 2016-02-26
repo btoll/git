@@ -10,6 +10,7 @@
 # TODO fix errors when non-existent branch
 BRANCH=
 FILES=
+RECURSE=
 SHA=
 # Note this will default to using buffers with only one window view.
 VIM="b"
@@ -23,6 +24,7 @@ usage() {
     echo "--branch, -b    : If the branch name is different from the ticket name,"
     echo "                  specify the branch name using this flag."
     echo "--help, -h      : Help"
+    echo "--recurse, -r   : Get files from more than one commit."
     echo "--split, -sp    : Open files in a horizontal split."
     echo "--tabs, -p      : Open files in tabs."
     echo "--vsplit, -vsp  : Open files in a vertical split."
@@ -42,6 +44,7 @@ if [ "$#" -gt 0 ]; then
         case "$OPT" in
             --branch|-b) shift; BRANCH="$1" ;;
             --help|-h) usage; exit 0 ;;
+            --recurse|-r) shift; RECURSE="$1" ;;
             --split|-sp) VIM="h" ;;
             --tabs|-p) VIM="t" ;;
             --vsplit|-vsp) VIM="v" ;;
@@ -56,5 +59,10 @@ if [ -z "$BRANCH" ]; then
 fi
 
 SHA=$(git rev-parse "$BRANCH")
-git ls --commit "$SHA" --edit "$VIM"
+
+if [ -n "$RECURSE" ]; then
+    git ls --commit "$SHA" --edit "$VIM" --recurse "$RECURSE"
+else
+    git ls --commit "$SHA" --edit "$VIM"
+fi
 
