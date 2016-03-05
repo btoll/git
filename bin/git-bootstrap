@@ -1,5 +1,5 @@
 #!/bin/bash
-# Get up and running quickly with the versioned files that make up the a commit.
+# Get up and running quickly with the versioned files that make up the commit.
 # If not given any arguments, `git-bootstrap` will assume the last commit.
 
 # Note the dependency on the `git-ls` extension:
@@ -29,12 +29,6 @@ usage() {
     echo
     echo "Note if no arguments are passed, the last commit will be assumed."
 }
-
-# http://stackoverflow.com/a/14127035/125349
-if [ "$PWD" != $(git rev-parse --show-toplevel) ]; then
-    echo "$(tput setaf 3)[WARNING]$(tput sgr0) You need to run this command from the toplevel of the working tree."
-    exit 1
-fi
 
 if [ "$#" -gt 0 ]; then
     while [ "$#" -gt 0 ]; do
