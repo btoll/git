@@ -11,13 +11,13 @@ HEAD=$(git rev-parse --abbrev-ref HEAD)
 INTERACTIVE=
 INTERACTIVE_MSG="merged or empty"
 NO_REMOTE_DELETE=
-PATTERN=${GIT_CLEANUP_PATTERN:-"."}
-REPO=${GIT_DEFAULT_REPO:-"origin"}
+PATTERN="."
+REPO="origin"
 
 delete_branch() {
     git branch "$DELETE_SWITCH" "$BRANCH"
 
-    if [ "$NO_REMOTE_DELETE" = false ]; then
+    if [ -z "$NO_REMOTE_DELETE" ]; then
         git push "$REPO" :"$BRANCH"
     fi
 }
@@ -49,15 +49,31 @@ usage() {
     echo "                      Defaults to 'origin'"
 }
 
+if [ "$#" -eq 0 ]; then
+    usage
+    exit 0
+fi
+
 # Swap out for user-provided options if given.
 while [ "$#" -gt 0 ]; do
     OPT="$1"
     case $OPT in
-        --file|-f) shift; FILE=$1 ;;
+        --file|-f) shift;
+            if [ -z "$1" ]; then
+                echo "$(tput setaf 1)[ERROR] No file given$(tput sgr0)."
+                exit 1
+            fi
+
+            FILE=$1
+            ;;
         --help|-h) usage; exit 0 ;;
         -i) INTERACTIVE=1 ;;
         --dry-run|-l) DRY_RUN=1 ;;
-        --no-merged) BRANCH_SWITCH="--no-merged"; DELETE_SWITCH="-D"; INTERACTIVE_MSG="unmerged" ;;
+        --no-merged)
+            BRANCH_SWITCH="--no-merged"
+            DELETE_SWITCH="-D"
+            INTERACTIVE_MSG="unmerged"
+            ;;
         --no-remote-delete) NO_REMOTE_DELETE=1 ;;
         --pattern|-p) shift; PATTERN=$1 ;;
         --repo|-r) shift; REPO=$1 ;;
