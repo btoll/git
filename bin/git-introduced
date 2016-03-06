@@ -19,18 +19,21 @@ usage() {
     echo "Usage: $0 [args]"
     echo
     echo "Args:"
-    echo "--format                 : The format passed to internally to git log --pretty."
-    echo "                           Defaults to '%h %an %ae %s %cd'."
+    echo "--format                  The format passed to internally to git log --pretty."
+    echo "                          Defaults to '%h %an %ae %s %cd'."
     echo
-    echo "--file, -file, -f        : The location of the file or directory to search. Note that the more specific the location the"
-    echo                             faster the lookup. Default to the current working directory.
+    echo "--file, -file, -f         The location of the file or directory to search. Note that the"
+    echo "                          more specific the location the faster the lookup. Default to the
+    echo "                          current working directory.
     echo
-    echo "--no-delete-file         : The default is to delete the temporary CSV file used by the tool. Use this flag to override."
+    echo "--no-delete-file          The default is to delete the temporary CSV file used by the tool."
+    echo "                          Use this flag to override."
     echo
-    echo "--open-in-browser        : Ope the commit on GitHub using the default browser."
-    echo "                           Currently only supported on OS X."
+    echo "--open-in-browser         Ope the commit on GitHub using the default browser."
+    echo "                          Currently only supported on OS X."
     echo
-    echo "--pattern, -pattern, -p  : Specify a pattern (method) that will be the basis of the log history search."
+    echo "--pattern, -pattern, -p   Specify a pattern (method) that will be the basis of the log:"
+    echo "                          history search."
     echo
 }
 

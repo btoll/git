@@ -33,26 +33,26 @@ usage() {
     echo "Usage: $0 [args]"
     echo
     echo "Args:"
-    echo "--blame       : If given will open the branch in the Blame view."
-    echo "                Not applicable if given a topic branch or hash."
+    echo "--blame        If given will open the branch in the Blame view."
+    echo "               Not applicable if given a topic branch or hash."
     echo
-    echo "--branch, -b  : The branch to use as the base lookup branch on GitHub."
+    echo "--branch, -b   The branch to use as the base lookup branch on GitHub."
     echo
-    echo "--file, -f    : The file to lookup on GitHub. Accepts relative paths."
+    echo "--file, -f     The file to lookup on GitHub. Accepts relative paths."
     echo
-    echo "--get-hash    : A branch name can be given instead of a hash. If so,"
-    echo "                this flag will get the hash of the branch, tag, etc."
-    echo "                For example:"
+    echo "--get-hash     A branch name can be given instead of a hash. If so,"
+    echo "               this flag will get the hash of the branch, tag, etc."
+    echo "               For example:"
     echo
-    echo "                    git hub --get-hash MY_COOL_TOPIC_BRANCH"
-    echo "                    git hub --get-hash MY_TAG"
+    echo "                   git hub --get-hash MY_COOL_TOPIC_BRANCH"
+    echo "                   git hub --get-hash MY_TAG"
     echo
-    echo "--hash        : The commit hash to lookup on GitHub."
+    echo "--hash         The commit hash to lookup on GitHub."
     echo
-    echo "-h            : Help."
+    echo "-h             Help."
     echo
-    echo "--range       : Specify in the format 'L10-L20' to highlight a visual range"
-    echo "                on GitHub."
+    echo "--range        Specify in the format 'L10-L20' to highlight a visual range"
+    echo "               on GitHub."
     echo
 }
 

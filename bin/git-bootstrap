@@ -20,12 +20,12 @@ usage() {
     echo "Usage: $0 [args]"
     echo
     echo "Args:"
-    echo "--commit, -c         : The commit from which to get the files."
-    echo "--help, -h           : Help."
-    echo "--recurse, -r        : Get files from more than one commit."
-    echo "--split, --sp, -h    : Open files in a horizontal split."
-    echo "--tabs, --tab, -p    : Open files in tabs."
-    echo "--vsplit, --vsp, -v  : Open files in a vertical split."
+    echo "--commit, -c          The commit from which to get the files."
+    echo "--help, -h            Help."
+    echo "--recurse, -r         Get files from more than one commit."
+    echo "--split, --sp, -h     Open files in a horizontal split."
+    echo "--tabs, --tab, -p     Open files in tabs."
+    echo "--vsplit, --vsp, -v   Open files in a vertical split."
     echo
     echo "Note if no arguments are passed, the last commit will be assumed."
 }

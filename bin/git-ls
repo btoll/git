@@ -21,26 +21,24 @@ usage() {
     echo "Usage: $0 [args]"
     echo
     echo "Args:"
-    echo "--commit, -c   : Use this commit to determine which files are shown"
-    echo "                 (defaults to HEAD)."
+    echo "--commit, -c    Use this commit to determine which files are shown (defaults to HEAD)."
     echo
-    echo "--dirty, -d    : List the files that are currently staged and modified"
-    echo "                 in the workspace. If not specified, it will default"
-    echo "                 to list the files that make up the last commit"
-    echo "                 (determined by $COMMIT)."
+    echo "--dirty, -d     List the files that are currently staged and modified in the workspace."
+    echo "                If not specified, it will default to list the files that make up the"
+    echo "                last commit (determined by \$COMMIT)."
     echo
-    echo "--edit, -e     : Open all listed files in Vim using:"
-    echo "                     b = one window (just buffers)"
-    echo "                     h = horizontally-split windows"
-    echo "                     t = tabs"
-    echo "                     v = vertically-split windows"
-    echo "                     Defaults to 'b'."
+    echo "--edit, -e      Open all listed files in Vim using:"
+    echo "                    b = one window (just buffers)"
+    echo "                    h = horizontally-split windows"
+    echo "                    t = tabs"
+    echo "                    v = vertically-split windows"
+    echo "                    Defaults to 'b'."
     echo
-    echo "                 Note that if a pattern is given that only the files"
-    echo "                 that match this pattern will be opened in Vim."
+    echo "                Note that if a pattern is given that only the files that match this"
+    echo "                pattern will be opened in Vim."
     echo
-    echo "--pattern, -p  : Specify a pattern that will be used to search through"
-    echo "                 all the files that make up the commit."
+    echo "--pattern, -p   Specify a pattern that will be used to search through all the files"
+    echo "                that make up the commit."
     echo
 }
 
