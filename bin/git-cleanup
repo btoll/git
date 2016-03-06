@@ -60,7 +60,7 @@ while [ "$#" -gt 0 ]; do
     case $OPT in
         --file|-f) shift;
             if [ -z "$1" ]; then
-                echo "$(tput setaf 1)[ERROR] No file given$(tput sgr0)."
+                echo "$(tput setaf 1)[ERROR]$(tput sgr0) No file given."
                 exit 1
             fi
 
@@ -75,7 +75,14 @@ while [ "$#" -gt 0 ]; do
             INTERACTIVE_MSG="unmerged"
             ;;
         --no-remote-delete) NO_REMOTE_DELETE=1 ;;
-        --pattern|-p) shift; PATTERN=$1 ;;
+        --pattern|-p) shift;
+            if [ -z "$1" ]; then
+                echo "$(tput setaf 1)[ERROR]$(tput sgr0) No pattern given."
+                exit 1
+            fi
+
+            PATTERN=$1
+            ;;
         --repo|-r) shift; REPO=$1 ;;
     esac
     shift
@@ -84,7 +91,7 @@ done
 # http://stackoverflow.com/a/3846451
 BRANCHES=$(git branch "$BRANCH_SWITCH" | cut -c 3-)
 
-echo "$(tput setaf 2)[MATCH PATTERN]$(tput sgr0) $PATTERN"
+echo "$(tput setaf 6)[MATCH PATTERN]$(tput sgr0) $PATTERN"
 
 if [ -n "$DRY_RUN" ]; then
     echo " $(tput setaf 6)[DRY RUN MODE]$(tput sgr0) The following branches will be removed:"
@@ -92,7 +99,7 @@ fi
 
 for BRANCH in $BRANCHES; do
     # Let's operate on only the desired branches.
-    if [[ "$BRANCH" =~ $PATTERN ]]; then
+    if [ $(echo "$BRANCH" | grep -E "$PATTERN") ]; then
         FOUND=1
 
         if [ -n "$DRY_RUN" ]; then
@@ -134,7 +141,7 @@ if [ -z "$DRY_RUN" ] && [ -n "$FILE" ]; then
     printf "%s\n" "${BUFFER[@]}" >> "$FILE"
     # ..and make it executable.
     chmod 701 "$FILE"
-    echo "$(tput setaf 2)[INFO]$(tput sgr0) Results written to $FILE."
+    echo "$(tput setaf 2)[SUCCESS]$(tput sgr0) Results written to $FILE."
     exit 0
 fi
 
