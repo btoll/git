@@ -1,12 +1,12 @@
 #!/bin/bash
 
 EXIT_CODE=0
-FILES=$(git diff-index --cached --name-only HEAD)
+FILES=$(git diff-index --cached --name-only HEAD 2> /dev/null)
 
 echo "$(tput setab 7)$(tput setaf 4)[INFO]$(tput sgr0) Running $(tput bold)debugger$(tput sgr0) pre-commit hook..."
 
 for F in $FILES; do
-    if [[ $(ag --vimgrep "^\s*debugger;?" $F > /dev/null) ]]; then
+    if [[ $(ag --vimgrep "^\s*debugger;?" $F 2> /dev/null) ]]; then
         echo "\t$(tput setaf 1)[ERROR]$(tput sgr0) The script $F contains an uncommented debugger statement."
         EXIT_CODE=1
     fi

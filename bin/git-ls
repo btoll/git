@@ -107,5 +107,5 @@ if [ -n "$VIM" ]; then
     CMD='vim '"$VIM"' $('"$CMD"')'
 fi
 
-eval "$CMD"
+eval "$CMD" 2> /dev/null
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 EXIT_CODE=0
-FILES=$(git diff-index --cached --name-only HEAD)
+FILES=$(git diff-index --cached --name-only HEAD 2> /dev/null)
 
 echo "$(tput setab 7)$(tput setaf 4)[INFO]$(tput sgr0) Running $(tput bold)EOF$(tput sgr0) pre-commit hook..."
 
@@ -16,7 +16,7 @@ for F in $FILES; do
         continue
     fi
 
-    if [[ $(awk 'END{print ($0=="")}' $F) == 0 ]]; then
+    if [[ $(awk 'END{print ($0=="")}' $F 2> /dev/null) == 0 ]]; then
         echo "\t$(tput setaf 1)[ERROR]$(tput sgr0) The script $F does not end with a blank line."
         EXIT_CODE=1
     fi

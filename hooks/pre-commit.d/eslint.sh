@@ -1,7 +1,7 @@
 #!/bin/bash
 
 EXIT_CODE=0
-FILES=$(git diff-index --cached --name-only HEAD)
+FILES=$(git diff-index --cached --name-only HEAD 2> /dev/null)
 
 echo "$(tput setab 7)$(tput setaf 4)[INFO]$(tput sgr0) Running $(tput bold)ESLint$(tput sgr0) pre-commit hook..."
 
