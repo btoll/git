@@ -11,7 +11,6 @@ for F in $FILES; do
 
         if [ "$?" == 1 ]; then
             # Note that eslint's error messages are verbose enough that we don't need to have our own.
-            #echo "\t$(tput setaf 1)[ERROR]$(tput sgr0) The script $F didn't pass muster."
             EXIT_CODE=1
         fi
     fi
