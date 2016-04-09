@@ -17,7 +17,7 @@ for F in $FILES; do
     fi
 
     if [[ $(awk 'END{print ($0=="")}' $F 2> /dev/null) == 0 ]]; then
-        echo "\t$(tput setaf 1)[ERROR]$(tput sgr0) The script $F does not end with a blank line."
+        echo "$(tput setaf 1)[ERROR]$(tput sgr0) The script $F does not end with a blank line."
         EXIT_CODE=1
     fi
 done
