@@ -79,7 +79,8 @@ FORMAT=${FORMAT:-"%h$DELIMITER%an$DELIMITER%ae$DELIMITER%s$DELIMITER%cd"}
 FILE=${FILE:=$(pwd)}
 TMP_FILE="$PATTERN.csv"
 
-git log --pretty="$FORMAT" -S"$PATTERN" -- "$FILE" > $TMP_FILE
+# -G = Find modifications to $PATTERN in addition to added or removed lines that include $PATTERN.
+git log --pretty="$FORMAT" -G"$PATTERN" -- "$FILE" > $TMP_FILE
 wait
 
 # Save previous (global) IFS.
