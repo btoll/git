@@ -40,6 +40,8 @@ usage() {
     echo "--pattern, -p   Specify a pattern that will be used to search through all the files"
     echo "                that make up the commit."
     echo
+    echo "--recurse, -r   Get files from more than one commit."
+    echo
 }
 
 # Swap out for user-provided options if given.
