@@ -1,0 +1,55 @@
+#!/bin/bash
+
+if [ "$#" -eq 0 ]; then
+    echo "$(tput setaf 1)[ERROR]$(tput sgr0) Not enough arguments."
+    echo "Usage: git remove-pattern <pattern>"
+else
+    # First, check for dependencies.
+    FAILED_DEPENDENCIES=
+    which ag &> /dev/null || {
+        FAILED_DEPENDENCIES="\nag"
+    }
+
+    which gsed &> /dev/null || {
+        FAILED_DEPENDENCIES+="\ngsed"
+    }
+
+    if [ -n "$FAILED_DEPENDENCIES" ]; then
+        echo -e "$(tput setaf 3)[WARNING]$(tput sgr0) git-pattern depends on the following packages which don't seem to be installed on your system: $FAILED_DEPENDENCIES"
+        echo -e "\nHave a nice day!"
+        exit 1
+    fi
+
+    PATTERN="$1"
+    INFO="$(tput setaf 6)[INFO]$(tput sgr0)"
+    SUCCESS="$(tput setaf 2)[SUCCESS]$(tput sgr0)"
+    FILES=$(git diff-index --cached --name-only HEAD 2> /dev/null | ag -l --vimgrep "$PATTERN")
+
+    if [ -n "$FILES" ]; then
+        echo "---------"
+        echo "$(tput setaf 1)[WARNING]$(tput sgr0) This utility modifies the files in-place, so make sure that you know what you are doing!"
+        echo "---------"
+
+        for FILE in $FILES; do
+            read -p "Pattern found in $(tput setaf 3)$FILE$(tput sgr0)... Choose [$(tput setaf 2)D$(tput sgr0)elete line/$(tput setaf 2)C$(tput sgr0)omment out/$(tput setaf 2)S$(tput sgr0)kip/$(tput setaf 2)Q$(tput sgr0)uit]? " ACTION
+
+            if [ "$ACTION" == "C" ] || [ "$ACTION" == "c" ]; then
+                gsed -i 's/\('"$PATTERN"'\)/\/\/\1/' "$FILE"
+                echo "$SUCCESS Commented out the text matching the pattern $PATTERN in $FILE"
+            elif [ "$ACTION" == "D" ] || [ "$ACTION" == "d" ]; then
+                gsed -i '/'"$PATTERN"'/d' "$FILE"
+                echo "$SUCCESS Removed the line matching the pattern $PATTERN in $FILE"
+            elif [ "$ACTION" == "S" ] || [ "$ACTION" == "s" ]; then
+                echo "$INFO Skipped $FILE."
+            elif [ "$ACTION" == "Q" ] || [ "$ACTION" == "q" ]; then
+                echo "$INFO Exiting."
+            else
+                echo "$INFO Aborting."
+                exit 1
+            fi
+        done
+    else
+        echo "$INFO No matches found."
+    fi
+fi
+
