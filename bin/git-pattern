@@ -23,29 +23,32 @@ else
     PATTERN="$1"
     INFO="$(tput setaf 6)[INFO]$(tput sgr0)"
     SUCCESS="$(tput setaf 2)[SUCCESS]$(tput sgr0)"
-    FILES=$(git diff-index --cached --name-only HEAD 2> /dev/null | ag -l --vimgrep "$PATTERN")
+    FILES=$(git diff-index --cached --name-only HEAD 2> /dev/null)
+
+    echo "---------"
+    echo "$(tput setaf 1)[WARNING]$(tput sgr0) This utility modifies the files in-place, so make sure that you know what you are doing!"
+    echo "---------"
 
     if [ -n "$FILES" ]; then
-        echo "---------"
-        echo "$(tput setaf 1)[WARNING]$(tput sgr0) This utility modifies the files in-place, so make sure that you know what you are doing!"
-        echo "---------"
-
         for FILE in $FILES; do
-            read -p "Pattern found in $(tput setaf 3)$FILE$(tput sgr0)... Choose [$(tput setaf 2)D$(tput sgr0)elete line/$(tput setaf 2)C$(tput sgr0)omment out/$(tput setaf 2)S$(tput sgr0)kip/$(tput setaf 2)Q$(tput sgr0)uit]? " ACTION
+            if [[ $(ag "$PATTERN" "$FILE") ]]; then
+                read -p "Pattern found in $(tput setaf 3)$FILE$(tput sgr0)... Choose [$(tput setaf 2)D$(tput sgr0)elete line/$(tput setaf 2)C$(tput sgr0)omment out/$(tput setaf 2)S$(tput sgr0)kip/$(tput setaf 2)Q$(tput sgr0)uit]? " ACTION
 
-            if [ "$ACTION" == "C" ] || [ "$ACTION" == "c" ]; then
-                gsed -i 's/\('"$PATTERN"'\)/\/\/\1/' "$FILE"
-                echo "$SUCCESS Commented out the text matching the pattern $PATTERN in $FILE"
-            elif [ "$ACTION" == "D" ] || [ "$ACTION" == "d" ]; then
-                gsed -i '/'"$PATTERN"'/d' "$FILE"
-                echo "$SUCCESS Removed the line matching the pattern $PATTERN in $FILE"
-            elif [ "$ACTION" == "S" ] || [ "$ACTION" == "s" ]; then
-                echo "$INFO Skipped $FILE."
-            elif [ "$ACTION" == "Q" ] || [ "$ACTION" == "q" ]; then
-                echo "$INFO Exiting."
-            else
-                echo "$INFO Aborting."
-                exit 1
+                if [ "$ACTION" == "C" ] || [ "$ACTION" == "c" ]; then
+                    gsed -i 's/\('"$PATTERN"'\)/\/\/\1/' "$FILE"
+                    echo "$SUCCESS Commented out the text matching the pattern $PATTERN in $FILE"
+                elif [ "$ACTION" == "D" ] || [ "$ACTION" == "d" ]; then
+                    gsed -i '/'"$PATTERN"'/d' "$FILE"
+                    echo "$SUCCESS Removed the line matching the pattern $PATTERN in $FILE"
+                elif [ "$ACTION" == "S" ] || [ "$ACTION" == "s" ]; then
+                    echo "$INFO Skipped $FILE."
+                elif [ "$ACTION" == "Q" ] || [ "$ACTION" == "q" ]; then
+                    echo "$INFO Exiting."
+                    exit 0
+                else
+                    echo "$INFO Aborting."
+                    exit 1
+                fi
             fi
         done
     else
