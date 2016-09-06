@@ -11,6 +11,7 @@ for F in $FILES; do
     if [[
         ( $MIMETYPE == image/gif ) ||
         ( $MIMETYPE == image/jpg ) ||
+        ( $MIMETYPE == image/jpeg ) ||
         ( $MIMETYPE == image/png )
     ]]; then
         continue
