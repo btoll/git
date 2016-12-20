@@ -5,6 +5,10 @@
 3. Run `./install.sh`
 4. Done
 
+Or install using [GNU Stow]:
+
+    stow -t $HOME/bin bin
+
 ### git aliases
 
 git get-hash
@@ -283,4 +287,6 @@ Example usages:
     git review -pattern debugger -e h -l 3
         - Opens all modified files that match that specified regular expression in horizontally-split windows,
           limiting the number of files opened to the first three.
+
+[GNU Stow]: https://www.gnu.org/software/stow/stow.html
 
