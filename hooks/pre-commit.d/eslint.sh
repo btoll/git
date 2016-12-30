@@ -21,7 +21,7 @@ else
         fi
     done
 
-    if [ "$EXIT_CODE" -eq 0 ]; then
+    if [ $EXIT_CODE -eq 0 ]; then
         echo "$(tput setab 7)$(tput setaf 2)[INFO]$(tput sgr0) Completed successfully."
     fi
 fi
