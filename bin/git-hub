@@ -11,6 +11,7 @@
 #
 # and vice-versa if viewing a file (i.e., 'tree' => 'blob').
 #
+ARCH=$(uname)
 BLAME=false
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
 FILE=
@@ -122,5 +123,12 @@ if [ -n "$RANGE" ]; then
     URL+="#$RANGE"
 fi
 
-echo "$URL" && open "$URL"
+echo "$URL"
+
+if [ $ARCH == "Linux" ]; then
+    xdg-open "$URL"
+else
+    open "$URL"
+fi
+
 
