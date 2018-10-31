@@ -1,0 +1,32 @@
+=head1 NAME
+
+git-get-hash - Get the hash of any branch or tagged commit.
+
+=head1 SYNOPSIS
+
+git get-hash [branch or tag]
+
+=head1 DESCRIPTION
+
+This will grep for the first commit hash in the branch or tag description. It can be useful in many different ways.
+
+=head1 EXAMPLES
+
+Use it for the good or bad anchor when bisecting:
+
+	git goto $(git get-hash extjs5.1.0)
+	git open $(git get-hash EXTJS-16400)
+	git get-hash 4.2.2 | xargs git bisect good
+	git bisect good $(git get-hash 4.2.2)
+	git bisect bad `git get-hash 4.2.2`
+
+Use it to check out a tagged version:
+
+	git get-hash 4.2.2 | xargs git checkout
+	git checkout $(git get-hash 4.2.2)
+	git checkout `git get-hash 4.2.2`
+
+=head1 AUTHOR
+
+Benjamin Toll <benjam72@yahoo.com>
+

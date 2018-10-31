@@ -1,0 +1,22 @@
+=head1 NAME
+
+git-goto - Checkout the hash of any tagged commit.
+
+=head1 SYNOPSIS
+
+git goto [tagname]
+
+=head1 DESCRIPTION
+
+This is most useful when needing to quickly check out a release without having to know the tagged hash.
+
+=head1 EXAMPLES
+
+git goto 5.1.0
+
+git goto extjs5.1.0
+
+=head1 AUTHOR
+
+Benjamin Toll <benjam72@yahoo.com>
+

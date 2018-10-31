@@ -34,7 +34,6 @@ git pre-commit hooks
 
 ## Git extensions
 
-
 - <a href="#git-bootstrap">git-bootstrap</a>
 - <a href="#git-cleanup">git-cleanup</a>
 - <a href="#git-get-hash">git-get-hash</a>
@@ -302,4 +301,13 @@ Example usages:
           limiting the number of files opened to the first three.
 
 [GNU Stow]: https://www.gnu.org/software/stow/stow.html
+
+<!--
+Generating man pages:
+
+    pod2man git-review.pod > git-review.1
+
+http://linuxfocus.org/English/November2003/article309.shtml
+-->
+
 
