@@ -1,15 +1,15 @@
-### Installation
+## Installation
 
-1. Make sure that you have write permissions to `/usr/local/share/man/man1`
-2. Clone the repo
-3. Run `./install.sh`
-4. Done
+1. Clone the repo.
+2. Run `./install.sh` to install the extensions and aliases.
+3. Run `./install_manpages.sh` to install the man pages.
+4. Pet a goat.
 
 Or install using [GNU Stow]:
 
     stow -t $HOME/bin bin
 
-### git aliases
+## Git aliases
 
 git get-hash
 
@@ -31,6 +31,18 @@ git pre-commit hooks
 
     git config --global --add hooks.pre-commit.hook "debugger.sh"
     git config --global --add hooks.pre-commit.hook "EOF.sh"
+
+## Git extensions
+
+
+- <a href="#git-bootstrap">git-bootstrap</a>
+- <a href="#git-cleanup">git-cleanup</a>
+- <a href="#git-get-hash">git-get-hash</a>
+- <a href="#git-goto">git-goto</a>
+- <a href="#git-hub">git-hub</a>
+- <a href="#git-introduced">git-introduced</a>
+- <a href="#git-ls">git-ls</a>
+- <a href="#git-review">git-review</a>
 
 ### git-bootstrap
 TODO
@@ -131,9 +143,10 @@ But as usual, make sure you know what you're doing! I am not responsible for los
 This will grep for the first commit hash in the branch or tag description. It can be useful in many different ways.
 
 For example:
-    - Use it to check out a tagged version.
-    - Use it for the good or bad anchor when bisecting.
-    - Use it in a pipeline.
+
+- Use it to check out a tagged version.
+- Use it for the good or bad anchor when bisecting.
+- Use it in a pipeline.
 
 When bisecting:
 
