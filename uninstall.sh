@@ -7,11 +7,11 @@ git config --global --unset alias.goto
 
 echo "$(tput setaf 2)[INFO]$(tput sgr0) Removing symbolic links for git extensions..."
 echo
-rm /usr/local/bin/git-bootstrap
-rm /usr/local/bin/git-cleanup
-rm /usr/local/bin/git-hub
-rm /usr/local/bin/git-introduced
-rm /usr/local/bin/git-ls
+rm ~/bin/git-bootstrap
+rm ~/bin/git-cleanup
+rm ~/bin/git-hub
+rm ~/bin/git-introduced
+rm ~/bin/git-ls
 
 echo "$(tput setaf 2)[INFO]$(tput sgr0) Removing git man pages..."
 echo

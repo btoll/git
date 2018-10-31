@@ -11,11 +11,11 @@ git config --global --add hooks.pre-commit.hook "eslint.sh"
 echo "$(tput setaf 2)[INFO]$(tput sgr0) Installing git extensions..."
 echo
 pushd bin
-ln -s "$PWD"/git-cleanup /usr/local/bin/git-bootstrap
-ln -s "$PWD"/git-cleanup /usr/local/bin/git-cleanup
-ln -s "$PWD"/git-hub /usr/local/bin/git-hub
-ln -s "$PWD"/git-introduced /usr/local/bin/git-introduced
-ln -s "$PWD"/git-ls /usr/local/bin/git-ls
+ln -s "$PWD"/git-cleanup ~/bin/git-bootstrap
+ln -s "$PWD"/git-cleanup ~/bin/git-cleanup
+ln -s "$PWD"/git-hub ~/bin/git-hub
+ln -s "$PWD"/git-introduced ~/bin/git-introduced
+ln -s "$PWD"/git-ls ~/bin/git-ls
 popd
 
 echo "$(tput setaf 2)[INFO]$(tput sgr0) Installing git man pages..."
