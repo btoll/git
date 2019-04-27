@@ -2,6 +2,7 @@
 # Installation script for custom Git extensions and aliases.
 
 echo "$(tput setaf 2)[INFO]$(tput sgr0) Creating global git aliases..."
+git config --global alias.dirty 'ls --dirty -e'
 git config --global alias.get-hash rev-parse
 git config --global alias.goto '!sh -c '"'git rev-parse \$0 | xargs git checkout'"
 git config --global --add hooks.pre-commit.hook "EOF.sh"

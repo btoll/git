@@ -12,6 +12,10 @@
 
 ## Git aliases
 
+git dirty
+
+    git config --global alias.dirty 'ls --dirty -e'
+
 git get-hash
 
     git config --global alias.get-hash rev-parse
