@@ -56,13 +56,15 @@ Get up and running quickly with the versioned files that make up a commit.
 
 In other words, all files from the specified commit will be automatically opened in Vim.  This is very handy when wanting to resume where you left off from your last editing session.
 
+> `git-bootstrap` differs from the `git-dirty` alias!  The former opens committed files, while the latter opens staged and modified files.
+
 If not given any arguments, `git-bootstrap` will assume the last commit.
 
 Usage:
 
     --commit, -c         The commit from which to get the files.
 
-    --help, -h           Help.
+    --help               Help.
 
     --recurse, -r        Get files from more than one commit.
 
@@ -279,13 +281,11 @@ It is basically a wrapper for ```git log -S``` and returns the same results, how
 
 List the files that are staged and modifed or that make up any given commit and optionally open in Vim for editing.
 
-It's best to show what this tool can do through examples.
-
 - List the files that make up the latest commit.
 
     `git ls`
 
-- List the files that are in the staged area and are modified in the workspace.
+- List the files that are in the staged area and are modified in the workspace.  This is the `git dirty` alias.
 
     `git ls --dirty`
 

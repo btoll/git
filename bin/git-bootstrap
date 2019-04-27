@@ -21,7 +21,7 @@ usage() {
     echo
     echo "Args:"
     echo "--commit, -c          The commit from which to get the files."
-    echo "--help, -h            Help."
+    echo "--help                Help."
     echo "--recurse, -r         Get files from more than one commit."
     echo "--split, --sp, -h     Open files in Vim in a horizontal split."
     echo "--tabs, --tab, -p     Open files in Vim in tabs."
@@ -35,7 +35,7 @@ if [ "$#" -gt 0 ]; then
         OPT="$1"
         case "$OPT" in
             --commit|-c) shift; COMMIT="$1" ;;
-            --help|-h) usage; exit 0 ;;
+            --help) usage; exit 0 ;;
             --recurse|-r) shift; RECURSE="$1" ;;
             --split|--sp|-h) VIM="h" ;;
             --tabs|--tab|-p) VIM="t" ;;
