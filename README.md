@@ -300,14 +300,11 @@ Example usages:
         - Opens all modified files that match that specified regular expression in horizontally-split windows,
           limiting the number of files opened to the first three.
 
+## Generating man pages
+
+    pod2man git-hub.pod > git-hub.1
+
+- http://linuxfocus.org/English/November2003/article309.shtml
+
 [GNU Stow]: https://www.gnu.org/software/stow/stow.html
-
-<!--
-Generating man pages:
-
-    pod2man git-review.pod > git-review.1
-
-http://linuxfocus.org/English/November2003/article309.shtml
--->
-
 

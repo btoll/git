@@ -1,0 +1,38 @@
+=head1 NAME
+
+git-hub - Open any file, directory or commit on GitHub in regular view or blame view.
+
+=head1 SYNOPSIS
+
+git hub [ -f, --file file ] [ -b, --branch branch ] [ --range 'L10-L20' ] [ --get-hash hash ] [ --hash hash ] [ --blame ]
+
+=head1 EXAMPLES
+
+git hub
+    - Opens the current working directory.
+
+git hub --file grid/filters/filter/List.js
+    - Opens the file.
+
+git hub -f grid/header/Container --blame
+    - Opens the file in a blame view.
+
+git hub --branch extjs-4.2.x -f Component.js
+    - Opens the file in a remote branch other than the one that is currently checked out.
+
+git hub --hash b51abf6f38902
+    - Opens the commit hash.
+
+git hub --get-hash EXTJS-15755
+    - Opens the commit hash to which the local topic branch points.
+
+git hub --get-hash extjs5.1.0
+    - Opens the commit hash to which the tag points.
+
+git hub -f app.js --range 'L10-L20'
+    - Opens the file with the specified range highlighted.
+
+=head1 AUTHOR
+
+Benjamin Toll <benjam72@yahoo.com>
+
