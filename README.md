@@ -2,12 +2,13 @@
 
 1. Clone the repo.
 2. Run `./install.sh` to install the extensions and aliases.
+
+    Or install using [GNU Stow]:
+
+    `stow -t $HOME/bin bin`
+
 3. Run `./install_manpages.sh` to install the man pages.
 4. Pet a goat.
-
-Or install using [GNU Stow]:
-
-    stow -t $HOME/bin bin
 
 ## Git aliases
 
@@ -34,6 +35,8 @@ git pre-commit hooks
 
 ## Git extensions
 
+> **NOTE** Any commands that open files will use Vim as the editor.
+
 - <a href="#git-bootstrap">git-bootstrap</a>
 - <a href="#git-cleanup">git-cleanup</a>
 - <a href="#git-get-hash">git-get-hash</a>
@@ -44,7 +47,30 @@ git pre-commit hooks
 - <a href="#git-review">git-review</a>
 
 ### git-bootstrap
-TODO
+
+Get up and running quickly with the versioned files that make up a commit.
+
+In other words, all files from the specified commit will be automatically opened in Vim.  This is very handy when wanting to resume where you left off from your last editing session.
+
+If not given any arguments, `git-bootstrap` will assume the last commit.
+
+Usage:
+
+    --commit, -c         The commit from which to get the files.
+
+    --help, -h           Help.
+
+    --recurse, -r        Get files from more than one commit.
+
+    --split, --sp, -h    Open files in Vim in a horizontal split.
+
+    --tabs, --tab, -p    Open files in Vim in tabs.
+
+    --vsplit, --vsp, -v  Open files in Vim in a vertical split.
+
+This script is just basically a nice front-end to `git ls`.  It runs the following command:
+
+    git ls --edit "$VIM" --recurse "$RECURSE" --commit "$COMMIT"
 
 ### git-cleanup
 
@@ -66,26 +92,28 @@ Example usage:
 
 Usage:
 
-    -h  Help
+    -h                  Help
 
-    -f  It's possible to specify a file to which all of the git branch deletion commands will be written.
-        This will not delete any branches. It's intention is to allow for further inspection of all the
-        deletion candidates. The file will be executable.
+    -f                  It's possible to specify a file to which all of the git branch deletion
+                        commands will be written.
+                        This will not delete any branches. It's intention is to allow for further
+                        inspection of all the deletion candidates. The file will be executable.
 
-    -i  Interactive mode.
+    -i                  Interactive mode.
 
-    --dry-run, -l  Will operate in DRY RUN mode.  Will list all branches to be deleted.
-        This is useful (and safe) when you are not sure which branches will be removed by the filter.
+    --dry-run, -l       Will operate in DRY RUN mode.  Will list all branches to be deleted.
+                        This is useful (and safe) when you are not sure which branches will be
+                        removed by the filter.
 
-    --no-merged Operate on unmerged branches instead.
+    --no-merged         Operate on unmerged branches instead.
 
-    --no-remote-delete Do not delete the branches remotely.
+    --no-remote-delete  Do not delete the branches remotely.
 
-    -p  The pattern to use for existing local branches.
-        Defaults to 'EXTJS.*'
+    -p                  The pattern to use for existing local branches.
+                        Defaults to 'EXTJS.*'
 
-    -r  The name of the remote repository from which to delete the branch.
-        Defaults to 'origin'.
+    -r                  The name of the remote repository from which to delete the branch.
+                        Defaults to 'origin'.
 
 This does the following:
 
