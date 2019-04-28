@@ -1,0 +1,17 @@
+=head1 NAME
+
+git-bootstrap - Get up and running quickly with the versioned files that make up a commit.
+
+=head1 SYNOPSIS
+
+git bootstrap [ -c, --commit commit ] [ -r, --recurse n ] [ -h, --sp, --split ] [ -v, --vsp, --vsplit ] [ -p, --tab, --tabs ]
+
+=head1 EXAMPLES
+
+git bootstrap
+    - Opens the files from the last commit in Vim as buffers.
+
+=head1 AUTHOR
+
+Benjamin Toll <benjam72@yahoo.com>
+

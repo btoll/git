@@ -1,5 +1,5 @@
 #!/bin/bash
-# Get up and running quickly with the versioned files that make up the commit.
+# Get up and running quickly with the versioned files that make up a commit.
 # If not given any arguments, `git-bootstrap` will assume the last commit.
 
 # Note the dependency on the `git-ls` extension:
