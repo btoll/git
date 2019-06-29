@@ -1,5 +1,6 @@
 #!/bin/bash
 
+ESLINT=
 EXIT_CODE=0
 FILES=$(git diff-index --cached --name-only HEAD 2> /dev/null | grep ".js\b")
 
@@ -7,15 +8,14 @@ if [ -z "$FILES" ]; then
     echo "$(tput setab 7)$(tput setaf 4)[INFO]$(tput sgr0) There is nothing to lint!"
 else
     # Find the local version and use rather than the global one.
-#    ESLINT=$(find $(pwd) -name eslint.js | grep bin)
+    ESLINT=$(npm bin)/eslint
 
     echo "$(tput setab 7)$(tput setaf 4)[INFO]$(tput sgr0) Running $(tput bold)ESLint$(tput sgr0) pre-commit hook..."
 
     for F in $FILES; do
-#        "$ESLINT" "$F"
-        eslint "$F"
+        "$ESLINT" "$F"
 
-        if [ "$?" == 1 ]; then
+        if [ "$?" -eq 1 ]; then
             # Note that eslint's error messages are verbose enough that we don't need to have our own.
             EXIT_CODE=1
         fi

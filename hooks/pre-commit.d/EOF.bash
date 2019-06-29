@@ -9,10 +9,10 @@ for F in $FILES; do
     MIMETYPE=$(file --mime-type -b "$F")
 
     if [[
-        ( $MIMETYPE == image/gif ) ||
-        ( $MIMETYPE == image/jpg ) ||
-        ( $MIMETYPE == image/jpeg ) ||
-        ( $MIMETYPE == image/png )
+        ( "$MIMETYPE" == image/gif ) ||
+        ( "$MIMETYPE" == image/jpg ) ||
+        ( "$MIMETYPE" == image/jpeg ) ||
+        ( "$MIMETYPE" == image/png )
     ]]; then
         continue
     fi
