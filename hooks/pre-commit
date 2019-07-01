@@ -1,27 +1,23 @@
 #!/bin/bash
 # https://osdir.com/ml/git/2009-01/msg00298.html
 
-if [ -z "$DISABLE_HOOKS" ] || [ "$DISABLE_HOOKS" -eq 0 ]; then
-    # Try for local hooks first.
-    STR=$(git config --get-all --local hooks.pre-commit.hook)
+# Try for local hooks first.
+STR=$(git config --get-all --local hooks.pre-commit.hook)
 
-    if [ -z "$STR" ]; then
-        STR=$(git config --get-all hooks.pre-commit.hook)
-    fi
+if [ -z "$STR" ]; then
+    STR=$(git config --get-all hooks.pre-commit.hook)
+fi
 
-    if [ -n "$STR" ]; then
-        for HOOK in $STR; do
-            bash "./.git/hooks/pre-commit.d/$HOOK"
+if [ -n "$STR" ]; then
+    for HOOK in $STR; do
+        bash "./.git/hooks/pre-commit.d/$HOOK"
 
-            if [ "$?" -eq 1 ]; then
-                exit 1
-            else
-                # Separate the hooks by an empty line.
-                echo
-            fi
-        done
-    fi
-else
-    echo "$(tput setaf 3)[WARN]$(tput sgr0) Pre-commit hooks are disabled!"
+        if [ "$?" -eq 1 ]; then
+            exit 1
+        else
+            # Separate the hooks by an empty line.
+            echo
+        fi
+    done
 fi
 
