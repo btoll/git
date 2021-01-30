@@ -2,15 +2,15 @@
 # https://osdir.com/ml/git/2009-01/msg00298.html
 
 # Try for local hooks first.
-STR=$(git config --get-all --local hooks.pre-commit.hook)
+HOOKS=$(git config --get-all --local hooks.pre-commit.hook)
 
-if [ -z "$STR" ]; then
-    STR=$(git config --get-all hooks.pre-commit.hook)
+if [ -z "$HOOKS" ]; then
+    HOOKS=$(git config --get-all --global hooks.pre-commit.hook)
 fi
 
-if [ -n "$STR" ]; then
-    for HOOK in $STR; do
-        bash "./.git/hooks/pre-commit.d/$HOOK"
+if [ -n "$HOOKS" ]; then
+    for HOOK in $HOOKS; do
+        bash ./.git/hooks/pre-commit.d/"$HOOK"
 
         if [ "$?" -eq 1 ]; then
             exit 1

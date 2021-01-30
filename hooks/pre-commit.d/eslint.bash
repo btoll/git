@@ -13,7 +13,7 @@ else
     echo "$(tput setab 7)$(tput setaf 4)[INFO]$(tput sgr0) Running $(tput bold)ESLint$(tput sgr0) pre-commit hook..."
 
     for F in $FILES; do
-        "$ESLINT" "$F"
+        "$ESLINT" "$F" 2> /dev/null
 
         if [ "$?" -eq 1 ]; then
             # Note that eslint's error messages are verbose enough that we don't need to have our own.
