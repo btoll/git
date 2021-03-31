@@ -1,18 +1,25 @@
 #!/bin/bash
-# https://osdir.com/ml/git/2009-01/msg00298.html
 
-# Try for local hooks first.
-HOOKS=$(git config --get-all --local hooks.pre-commit.hook)
-
-if [ -z "$HOOKS" ]; then
-    HOOKS=$(git config --get-all --global hooks.pre-commit.hook)
+if [ $# -eq 1 ]
+then
+    echo "[ERROR] You must specify a PROJECT name."
+    exit 1
 fi
 
-if [ -n "$HOOKS" ]; then
-    for HOOK in $HOOKS; do
-        bash ./.git/hooks/pre-commit.d/"$HOOK"
+# Try for local hooks first.
+HOOKS=$(git config --local --get-all hooks.pre-commit)
 
-        if [ "$?" -eq 1 ]; then
+if [ -z "$HOOKS" ]
+then
+    HOOKS=$(git config --global --get-all hooks.pre-commit."$PROJECT")
+fi
+
+if [ -n "$HOOKS" ]
+then
+    for HOOK in $HOOKS
+    do
+        if ! bash "./.git/hooks/pre-commit.d/$HOOK"
+        then
             exit 1
         else
             # Separate the hooks by an empty line.
